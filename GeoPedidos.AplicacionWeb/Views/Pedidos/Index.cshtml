@@ -1,0 +1,171 @@
+﻿
+@{
+    ViewData["Title"] = "Pedidos";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section Estilos{
+    <!-- ============================================================
+    =ESTILOS PARA ESTA PAGINA
+    ===============================================================-->
+    <link rel="stylesheet" href="~/vendor/datatables/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="~/vendor/datatables/extensiones/css/responsive.dataTables.min.css">
+    <link rel="stylesheet" href="~/vendor/datatables/extensiones/css/buttons.dataTables.min.css">
+}
+
+<div class="content-wrapper">
+    <!-- BUSQUEDA -->
+    <div class="card mb-4">
+        <h5 class="card-header">Busqueda de Pedidos</h5>
+        <br />
+        <div class="card-body">
+            <div class="row gx-3 gy-2 align-items-center">
+                <div class="col-md-3">
+                    <label class="form-label" for="selectTypeOpt">Empresas</label>
+                    <select id="cboEmpresas" class="form-select color-dropdown">
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label" for="selectPlacement">Sucursales</label>
+                    <select class="form-select placement-dropdown" id="cboSucursales">
+                    </select>
+                </div>
+            </div>
+
+            <!-- Radio -->
+            <div class="justify-content-center">
+                <div class="row gy-3">
+                    <div class="col-xl-6">
+                        <div class="demo-vertical-spacing">
+                            <!-- Radio -->
+                            <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+                                <input type="radio" class="btn-check" name="rbReporte" id="rbTodos" checked/>
+                                <label class="btn btn-outline-primary" for="rbTodos">Todos</label>
+                                <input type="radio" class="btn-check" name="rbReporte" id="rbHelados"  />
+                                <label class="btn btn-outline-primary" for="rbHelados">Helados</label>
+                                <input type="radio" class="btn-check" name="rbReporte" id="rbProductos"  />
+                                <label class="btn btn-outline-primary" for="rbProductos">Productos</label>
+                                <input type="radio" class="btn-check" name="rbReporte" id="rbInsumos" />
+                                <label class="btn btn-outline-primary" for="rbInsumos">Insumos</label>
+                                <input type="radio" class="btn-check" name="rbReporte" id="rbPasteleria"  />
+                                <label class="btn btn-outline-primary" for="rbPasteleria">Pasteleria</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /Radio -->
+
+            <br />
+
+            <!-- Date -->
+            <div class="row gy-3 gy-2 align-items-center">
+                <div class="col-md">
+                    <label for="html5-date-input" class="form-label">Desde</label>
+                    <div class="col-md-10">
+                        <input class="form-control" type="date" value="2021-06-18" id="txtDesde" />
+                    </div>
+                </div>
+                <div class="col-md">
+                    <label for="html5-date-input" class="form-label">Hasta</label>
+                    <div class="col-md-10">
+                        <input class="form-control" type="date" value="2021-06-18" id="txtHasta" />
+                    </div>
+                </div>
+            </div>
+            <!-- /Date -->
+
+        </div>
+    </div>
+    <!--/ BUSQUEDA -->
+
+
+    <!-- TABLA -->
+    <div class="card">
+        <div class="card-body">
+            <div class="demo-inline-spacing">
+                <button type="button" class="btn rounded-pill btn-success" id="btnHelado">Agregar Helado</button>
+                <button type="button" class="btn rounded-pill btn-success" id="btnProducto">Agregar Producto</button>
+                <button type="button" class="btn rounded-pill btn-success" id="btnInsumo">Agregar Insumo</button>
+                <button type="button" class="btn rounded-pill btn-success" id="btnPasteleria">Agregar Pasteleria</button>
+            </div>
+        </div>
+@*        <h5 class="card-header">RESULTADOS</h5>*@
+        <div class="table-responsive text-nowrap">
+            <table class="table" id="tbdata">
+                <thead>
+                    <tr>
+                        <th>Nro</th>
+                        <th>Fecha</th>
+                        <th>Pedido</th>
+                        <th>Tipo</th>
+                        <th>Estado</th>
+                        <th>Cant.</th>
+                        <th>Sucursal</th>
+                        <th>Usuario</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody class="table-border-bottom-0">
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+    <!--/ TABLA -->
+</div>
+
+
+<!--  Modal-->
+<div class="modal fade" id="modalData" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog" role="document" style="max-width: 70%">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="mb-0" id="titulo"></h4>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="table-responsive text-nowrap">
+                        <table class="table" id="tbPedido">
+                            <thead>
+                                <tr>
+                                    <th>Codigo</th>
+                                    <th>Descripcion</th>
+                                    <th>Categoria</th>
+                                    <th>Cantidad</th>
+                                    <th>Seleccionar</th>
+                                </tr>
+                            </thead>
+                            <tbody class="table-border-bottom-0">
+                            </tbody>
+                        </table>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-success btn-sm" type="button" id="btnGuardar">Guardar</button>
+                <button class="btn btn-warning btn-sm" type="button" id="btnPendiente">Pendiente</button>
+                <button class="btn btn-danger btn-sm" type="button" data-dismiss="modal" id="CerrarModal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts{
+    <!-- ============================================================
+    =SCRIPTS PARA ESTA PAGINA
+    ===============================================================-->
+    <script src="~/vendor/datatables/jquery.dataTables.min.js"></script>
+    <script src="~/vendor/datatables/dataTables.bootstrap4.min.js"></script>
+
+    <script src="~/vendor/datatables/extensiones/js/dataTables.responsive.min.js"></script>
+
+    <script src="~/vendor/datatables/extensiones/js/dataTables.buttons.min.js"></script>
+    <script src="~/vendor/datatables/extensiones/js/jszip.min.js"></script>
+    <script src="~/vendor/datatables/extensiones/js/buttons.html5.min.js"></script>
+    <script src="~/vendor/datatables/extensiones/js/buttons.print.min.js"></script>
+
+    <script src="~/js/vistas/Pedidos_Index.js"></script>
+}
+

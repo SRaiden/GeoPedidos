@@ -1,0 +1,360 @@
+{
+  "format": 1,
+  "restore": {
+    "C:\\Users\\Nata\\OneDrive\\Documentos\\GitHub\\GeoPedidos\\GeoPedidos.AplicacionWeb\\GeoPedidos.AplicacionWeb.csproj": {}
+  },
+  "projects": {
+    "C:\\Users\\Nata\\OneDrive\\Documentos\\GitHub\\GeoPedidos\\GeoPedidos.AplicacionWeb\\GeoPedidos.AplicacionWeb.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\Nata\\OneDrive\\Documentos\\GitHub\\GeoPedidos\\GeoPedidos.AplicacionWeb\\GeoPedidos.AplicacionWeb.csproj",
+        "projectName": "GeoPedidos.AplicacionWeb",
+        "projectPath": "C:\\Users\\Nata\\OneDrive\\Documentos\\GitHub\\GeoPedidos\\GeoPedidos.AplicacionWeb\\GeoPedidos.AplicacionWeb.csproj",
+        "packagesPath": "C:\\Users\\Nata\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Nata\\OneDrive\\Documentos\\GitHub\\GeoPedidos\\GeoPedidos.AplicacionWeb\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\Nata\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net6.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\sdk\\7.0.306\\Sdks\\Microsoft.NET.Sdk.Web\\library-packs": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net6.0": {
+            "targetAlias": "net6.0",
+            "projectReferences": {
+              "C:\\Users\\Nata\\OneDrive\\Documentos\\GitHub\\GeoPedidos\\GeoPedidos.BLL\\GeoPedidos.BLL.csproj": {
+                "projectPath": "C:\\Users\\Nata\\OneDrive\\Documentos\\GitHub\\GeoPedidos\\GeoPedidos.BLL\\GeoPedidos.BLL.csproj"
+              },
+              "C:\\Users\\Nata\\OneDrive\\Documentos\\GitHub\\GeoPedidos\\GeoPedidos.Entity\\GeoPedidos.Entity.csproj": {
+                "projectPath": "C:\\Users\\Nata\\OneDrive\\Documentos\\GitHub\\GeoPedidos\\GeoPedidos.Entity\\GeoPedidos.Entity.csproj"
+              },
+              "C:\\Users\\Nata\\OneDrive\\Documentos\\GitHub\\GeoPedidos\\GeoPedidos.IOC\\GeoPedidos.IOC.csproj": {
+                "projectPath": "C:\\Users\\Nata\\OneDrive\\Documentos\\GitHub\\GeoPedidos\\GeoPedidos.IOC\\GeoPedidos.IOC.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net6.0": {
+          "targetAlias": "net6.0",
+          "dependencies": {
+            "AutoMapper": {
+              "target": "Package",
+              "version": "[12.0.1, )"
+            },
+            "AutoMapper.Extensions.Microsoft.DependencyInjection": {
+              "target": "Package",
+              "version": "[12.0.1, )"
+            },
+            "DinkToPdf": {
+              "target": "Package",
+              "version": "[1.0.8, )"
+            },
+            "Microsoft.VisualStudio.Web.CodeGeneration.Design": {
+              "target": "Package",
+              "version": "[6.0.15, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.AspNetCore.App": {
+              "privateAssets": "none"
+            },
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.306\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "C:\\Users\\Nata\\OneDrive\\Documentos\\GitHub\\GeoPedidos\\GeoPedidos.BLL\\GeoPedidos.BLL.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\Nata\\OneDrive\\Documentos\\GitHub\\GeoPedidos\\GeoPedidos.BLL\\GeoPedidos.BLL.csproj",
+        "projectName": "GeoPedidos.BLL",
+        "projectPath": "C:\\Users\\Nata\\OneDrive\\Documentos\\GitHub\\GeoPedidos\\GeoPedidos.BLL\\GeoPedidos.BLL.csproj",
+        "packagesPath": "C:\\Users\\Nata\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Nata\\OneDrive\\Documentos\\GitHub\\GeoPedidos\\GeoPedidos.BLL\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\Nata\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net6.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net6.0": {
+            "targetAlias": "net6.0",
+            "projectReferences": {
+              "C:\\Users\\Nata\\OneDrive\\Documentos\\GitHub\\GeoPedidos\\GeoPedidos.DAL\\GeoPedidos.DAL.csproj": {
+                "projectPath": "C:\\Users\\Nata\\OneDrive\\Documentos\\GitHub\\GeoPedidos\\GeoPedidos.DAL\\GeoPedidos.DAL.csproj"
+              },
+              "C:\\Users\\Nata\\OneDrive\\Documentos\\GitHub\\GeoPedidos\\GeoPedidos.Entity\\GeoPedidos.Entity.csproj": {
+                "projectPath": "C:\\Users\\Nata\\OneDrive\\Documentos\\GitHub\\GeoPedidos\\GeoPedidos.Entity\\GeoPedidos.Entity.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net6.0": {
+          "targetAlias": "net6.0",
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.306\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "C:\\Users\\Nata\\OneDrive\\Documentos\\GitHub\\GeoPedidos\\GeoPedidos.DAL\\GeoPedidos.DAL.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\Nata\\OneDrive\\Documentos\\GitHub\\GeoPedidos\\GeoPedidos.DAL\\GeoPedidos.DAL.csproj",
+        "projectName": "GeoPedidos.DAL",
+        "projectPath": "C:\\Users\\Nata\\OneDrive\\Documentos\\GitHub\\GeoPedidos\\GeoPedidos.DAL\\GeoPedidos.DAL.csproj",
+        "packagesPath": "C:\\Users\\Nata\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Nata\\OneDrive\\Documentos\\GitHub\\GeoPedidos\\GeoPedidos.DAL\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\Nata\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net6.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net6.0": {
+            "targetAlias": "net6.0",
+            "projectReferences": {
+              "C:\\Users\\Nata\\OneDrive\\Documentos\\GitHub\\GeoPedidos\\GeoPedidos.Entity\\GeoPedidos.Entity.csproj": {
+                "projectPath": "C:\\Users\\Nata\\OneDrive\\Documentos\\GitHub\\GeoPedidos\\GeoPedidos.Entity\\GeoPedidos.Entity.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net6.0": {
+          "targetAlias": "net6.0",
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.306\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "C:\\Users\\Nata\\OneDrive\\Documentos\\GitHub\\GeoPedidos\\GeoPedidos.Entity\\GeoPedidos.Entity.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\Nata\\OneDrive\\Documentos\\GitHub\\GeoPedidos\\GeoPedidos.Entity\\GeoPedidos.Entity.csproj",
+        "projectName": "GeoPedidos.Entity",
+        "projectPath": "C:\\Users\\Nata\\OneDrive\\Documentos\\GitHub\\GeoPedidos\\GeoPedidos.Entity\\GeoPedidos.Entity.csproj",
+        "packagesPath": "C:\\Users\\Nata\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Nata\\OneDrive\\Documentos\\GitHub\\GeoPedidos\\GeoPedidos.Entity\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\Nata\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net6.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net6.0": {
+            "targetAlias": "net6.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net6.0": {
+          "targetAlias": "net6.0",
+          "dependencies": {
+            "Microsoft.EntityFrameworkCore.SqlServer": {
+              "target": "Package",
+              "version": "[7.0.9, )"
+            },
+            "Microsoft.EntityFrameworkCore.Tools": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[7.0.9, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.306\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "C:\\Users\\Nata\\OneDrive\\Documentos\\GitHub\\GeoPedidos\\GeoPedidos.IOC\\GeoPedidos.IOC.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\Nata\\OneDrive\\Documentos\\GitHub\\GeoPedidos\\GeoPedidos.IOC\\GeoPedidos.IOC.csproj",
+        "projectName": "GeoPedidos.IOC",
+        "projectPath": "C:\\Users\\Nata\\OneDrive\\Documentos\\GitHub\\GeoPedidos\\GeoPedidos.IOC\\GeoPedidos.IOC.csproj",
+        "packagesPath": "C:\\Users\\Nata\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Nata\\OneDrive\\Documentos\\GitHub\\GeoPedidos\\GeoPedidos.IOC\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\Nata\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net6.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net6.0": {
+            "targetAlias": "net6.0",
+            "projectReferences": {
+              "C:\\Users\\Nata\\OneDrive\\Documentos\\GitHub\\GeoPedidos\\GeoPedidos.BLL\\GeoPedidos.BLL.csproj": {
+                "projectPath": "C:\\Users\\Nata\\OneDrive\\Documentos\\GitHub\\GeoPedidos\\GeoPedidos.BLL\\GeoPedidos.BLL.csproj"
+              },
+              "C:\\Users\\Nata\\OneDrive\\Documentos\\GitHub\\GeoPedidos\\GeoPedidos.DAL\\GeoPedidos.DAL.csproj": {
+                "projectPath": "C:\\Users\\Nata\\OneDrive\\Documentos\\GitHub\\GeoPedidos\\GeoPedidos.DAL\\GeoPedidos.DAL.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net6.0": {
+          "targetAlias": "net6.0",
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.306\\RuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}

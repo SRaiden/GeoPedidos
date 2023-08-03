@@ -1,0 +1,159 @@
+﻿
+@{
+    ViewData["Title"] = "Listado de Usuarios";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section Estilos{
+    <!-- ============================================================
+    =ESTILOS PARA ESTA PAGINA
+    ===============================================================-->
+    <link rel="stylesheet" href="~/vendor/datatables/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="~/vendor/datatables/extensiones/css/responsive.dataTables.min.css">
+    <link rel="stylesheet" href="~/vendor/datatables/extensiones/css/buttons.dataTables.min.css">
+}
+
+<div class="content-wrapper">
+    <!-- TABLA -->
+    <div class="card-body">
+        <div class="demo-inline-spacing">
+            <button type="button" class="btn rounded-pill btn-success" id="btnNuevo">Agregar Usuario</button>
+        </div>
+        <br />
+        <div class="table-responsive text-nowrap">
+            <table class="table" id="tbdata">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Nombre y Apellido</th>
+                        <th>Correo</th>
+                        <th>Estado</th>
+                        <th>Tipo Usuario</th>
+                        <th>Sucursal</th>
+                        <th>Empresa</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody class="table-border-bottom-0">
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <!--/ TABLA -->
+</div>
+
+<!--  Modal-->
+<div class="modal fade" id="modalData" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="mb-0" id="titulo"></h4>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="col-xl">
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <input type="hidden" value="0" id="txtId">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label" for="basic-icon-default-fullname">Nombre</label>
+                                <div class="input-group input-group-merge">
+                                    <span id="basic-icon-default-company2" class="input-group-text">
+                                        <i class="bx bx-buildings"></i>
+                                    </span>
+                                    <input type="text" class="form-control" id="txtNombre" />
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label" for="basic-icon-default-fullname">Apellido</label>
+                                <div class="input-group input-group-merge">
+                                    <span id="basic-icon-default-company2" class="input-group-text">
+                                        <i class="bx bx-buildings"></i>
+                                    </span>
+                                    <input type="text" class="form-control" id="txtApellido"/>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label" for="basic-icon-default-fullname">Email</label>
+                                <div class="input-group input-group-merge">
+                                    <span id="basic-icon-default-company2" class="input-group-text">
+                                        <i class="bx bx-buildings"></i>
+                                    </span>
+                                    <input type="email" class="form-control" id="txtEmail" />
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="largeSelect" class="form-label">Empresa</label>
+                                <select id="cboEmpresas" class="form-select form-select-lg">
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="largeSelect" class="form-label">Sucursal</label>
+                                <select id="cboSucursales" class="form-select form-select-lg">
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="largeSelect" class="form-label">Estado</label>
+                                <select id="cboEstado" class="form-select form-select-lg">
+                                    <option value="1">Activo</option>
+                                    <option value="0">Inactivo</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label" for="basic-icon-default-fullname">Usuario</label>
+                                <div class="input-group input-group-merge">
+                                    <span id="basic-icon-default-company2" class="input-group-text">
+                                        <i class="bx bx-buildings"></i>
+                                    </span>
+                                    <input type="text" class="form-control" id="txtUsuario" readonly/>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label" for="basic-icon-default-phone">Nueva Contraseña</label>
+                                <div class="input-group input-group-merge">
+                                    <span id="basic-icon-default-phone2" class="input-group-text">
+                                        <i class="bx bx-phone"></i>
+                                    </span>
+                                    <input type="password" id="txtPassword" class="form-control phone-mask" />
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label" for="basic-icon-default-phone">Repita la Contraseña</label>
+                                <div class="input-group input-group-merge">
+                                    <span id="basic-icon-default-phone2" class="input-group-text">
+                                        <i class="bx bx-phone"></i>
+                                    </span>
+                                    <input type="password" id="txtRepetir" class="form-control phone-mask" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary btn-sm" type="button" id="btnGuardar">Guardar</button>
+                <button class="btn btn-danger btn-sm" type="button" data-dismiss="modal" id="CerrarModal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@section Scripts{
+    <!-- ============================================================
+    =SCRIPTS PARA ESTA PAGINA
+    ===============================================================-->
+    <script src="~/vendor/datatables/jquery.dataTables.min.js"></script>
+    <script src="~/vendor/datatables/dataTables.bootstrap4.min.js"></script>
+
+    <script src="~/vendor/datatables/extensiones/js/dataTables.responsive.min.js"></script>
+
+    <script src="~/vendor/datatables/extensiones/js/dataTables.buttons.min.js"></script>
+    <script src="~/vendor/datatables/extensiones/js/jszip.min.js"></script>
+    <script src="~/vendor/datatables/extensiones/js/buttons.html5.min.js"></script>
+    <script src="~/vendor/datatables/extensiones/js/buttons.print.min.js"></script>
+
+    <script src="~/js/vistas/Usuarios_Index.js"></script>
+}

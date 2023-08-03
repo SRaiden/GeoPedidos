@@ -1,0 +1,14 @@
+C:\Users\Nata\OneDrive\Documentos\GitHub\GeoPedidos\GeoPedidos.Entity\bin\Release\net6.0\GeoPedidos.Entity.deps.json
+C:\Users\Nata\OneDrive\Documentos\GitHub\GeoPedidos\GeoPedidos.Entity\bin\Release\net6.0\GeoPedidos.Entity.runtimeconfig.json
+C:\Users\Nata\OneDrive\Documentos\GitHub\GeoPedidos\GeoPedidos.Entity\bin\Release\net6.0\GeoPedidos.Entity.dll
+C:\Users\Nata\OneDrive\Documentos\GitHub\GeoPedidos\GeoPedidos.Entity\bin\Release\net6.0\GeoPedidos.Entity.pdb
+C:\Users\Nata\OneDrive\Documentos\GitHub\GeoPedidos\GeoPedidos.Entity\obj\Release\net6.0\GeoPedidos.Entity.csproj.AssemblyReference.cache
+C:\Users\Nata\OneDrive\Documentos\GitHub\GeoPedidos\GeoPedidos.Entity\obj\Release\net6.0\GeoPedidos.Entity.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Nata\OneDrive\Documentos\GitHub\GeoPedidos\GeoPedidos.Entity\obj\Release\net6.0\GeoPedidos.Entity.AssemblyInfoInputs.cache
+C:\Users\Nata\OneDrive\Documentos\GitHub\GeoPedidos\GeoPedidos.Entity\obj\Release\net6.0\GeoPedidos.Entity.AssemblyInfo.cs
+C:\Users\Nata\OneDrive\Documentos\GitHub\GeoPedidos\GeoPedidos.Entity\obj\Release\net6.0\GeoPedidos.Entity.csproj.CoreCompileInputs.cache
+C:\Users\Nata\OneDrive\Documentos\GitHub\GeoPedidos\GeoPedidos.Entity\obj\Release\net6.0\GeoPedidos.Entity.dll
+C:\Users\Nata\OneDrive\Documentos\GitHub\GeoPedidos\GeoPedidos.Entity\obj\Release\net6.0\refint\GeoPedidos.Entity.dll
+C:\Users\Nata\OneDrive\Documentos\GitHub\GeoPedidos\GeoPedidos.Entity\obj\Release\net6.0\GeoPedidos.Entity.pdb
+C:\Users\Nata\OneDrive\Documentos\GitHub\GeoPedidos\GeoPedidos.Entity\obj\Release\net6.0\GeoPedidos.Entity.genruntimeconfig.cache
+C:\Users\Nata\OneDrive\Documentos\GitHub\GeoPedidos\GeoPedidos.Entity\obj\Release\net6.0\ref\GeoPedidos.Entity.dll

@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\build\GeoPedidos.AplicacionWeb.props" />
+</Project>

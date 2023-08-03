@@ -1,0 +1,17 @@
+C:\Users\Nata\OneDrive\Documentos\GitHub\GeoPedidos\GeoPedidos.BLL\bin\Release\net6.0\GeoPedidos.BLL.deps.json
+C:\Users\Nata\OneDrive\Documentos\GitHub\GeoPedidos\GeoPedidos.BLL\bin\Release\net6.0\GeoPedidos.BLL.dll
+C:\Users\Nata\OneDrive\Documentos\GitHub\GeoPedidos\GeoPedidos.BLL\bin\Release\net6.0\GeoPedidos.BLL.pdb
+C:\Users\Nata\OneDrive\Documentos\GitHub\GeoPedidos\GeoPedidos.BLL\bin\Release\net6.0\GeoPedidos.DAL.dll
+C:\Users\Nata\OneDrive\Documentos\GitHub\GeoPedidos\GeoPedidos.BLL\bin\Release\net6.0\GeoPedidos.Entity.dll
+C:\Users\Nata\OneDrive\Documentos\GitHub\GeoPedidos\GeoPedidos.BLL\bin\Release\net6.0\GeoPedidos.DAL.pdb
+C:\Users\Nata\OneDrive\Documentos\GitHub\GeoPedidos\GeoPedidos.BLL\bin\Release\net6.0\GeoPedidos.Entity.pdb
+C:\Users\Nata\OneDrive\Documentos\GitHub\GeoPedidos\GeoPedidos.BLL\obj\Release\net6.0\GeoPedidos.BLL.csproj.AssemblyReference.cache
+C:\Users\Nata\OneDrive\Documentos\GitHub\GeoPedidos\GeoPedidos.BLL\obj\Release\net6.0\GeoPedidos.BLL.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Nata\OneDrive\Documentos\GitHub\GeoPedidos\GeoPedidos.BLL\obj\Release\net6.0\GeoPedidos.BLL.AssemblyInfoInputs.cache
+C:\Users\Nata\OneDrive\Documentos\GitHub\GeoPedidos\GeoPedidos.BLL\obj\Release\net6.0\GeoPedidos.BLL.AssemblyInfo.cs
+C:\Users\Nata\OneDrive\Documentos\GitHub\GeoPedidos\GeoPedidos.BLL\obj\Release\net6.0\GeoPedidos.BLL.csproj.CoreCompileInputs.cache
+C:\Users\Nata\OneDrive\Documentos\GitHub\GeoPedidos\GeoPedidos.BLL\obj\Release\net6.0\GeoPedidos.BLL.csproj.CopyComplete
+C:\Users\Nata\OneDrive\Documentos\GitHub\GeoPedidos\GeoPedidos.BLL\obj\Release\net6.0\GeoPedidos.BLL.dll
+C:\Users\Nata\OneDrive\Documentos\GitHub\GeoPedidos\GeoPedidos.BLL\obj\Release\net6.0\refint\GeoPedidos.BLL.dll
+C:\Users\Nata\OneDrive\Documentos\GitHub\GeoPedidos\GeoPedidos.BLL\obj\Release\net6.0\GeoPedidos.BLL.pdb
+C:\Users\Nata\OneDrive\Documentos\GitHub\GeoPedidos\GeoPedidos.BLL\obj\Release\net6.0\ref\GeoPedidos.BLL.dll
