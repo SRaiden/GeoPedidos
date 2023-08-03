@@ -83,6 +83,108 @@ namespace GeoPedidos.AplicacionWeb.Controllers
             return StatusCode(StatusCodes.Status200OK, new { data = vmLista });
         }
 
+        [HttpGet]
+        public async Task<IActionResult> ObtenerPedido(int idSucursal, int numeroPedido)
+        {
+            List<VMFabricaPedidoDetalle> vmPedidoDetalle = _mapper.Map<List<VMFabricaPedidoDetalle>>(await _pedidosServices.ObtenerPedidos(idSucursal, numeroPedido));
+            return StatusCode(StatusCodes.Status200OK, vmPedidoDetalle);
+        }
+
+        //------------------------------------ ABM ---------------------------------------------------// 
+
+        [HttpPost]
+        public async Task<IActionResult> GuardarPedido([FromBody] List<VMPedido> modelo)
+        {
+            GenericResponse<VMFabricaPedido> gResponse = new GenericResponse<VMFabricaPedido>();
+
+            try
+            {
+                // SEPARAR
+                VMFabricaPedido vm = new VMFabricaPedido();
+                vm.Tipo = modelo[0].TipoCabecera;
+                vm.Estado = modelo[0].EstadoCabecera;
+                vm.Cantidad = modelo[0].CantidadCabecera;
+                vm.Created = modelo[0].CreatedDetalle;
+                vm.Remito = 0;
+                vm.IdUsuario = 1; // Luego se modifica con los permisos para saber que usuario lo registro
+                vm.IdSucursal = 1; // Luego se modifica con los permisos para saber que sucursal lo registro
+
+                List<VMFabricaPedidoDetalle> vmpd = new List<VMFabricaPedidoDetalle>();
+                foreach(var i in modelo)
+                {
+                    VMFabricaPedidoDetalle vms = new VMFabricaPedidoDetalle();
+                    vms.Codigo = i.CodigoDetalle;
+                    vms.Cantidad = i.CantidadDetalle;
+                    vms.Created = DateTime.Parse(i.CreatedDetalle.ToString());
+                    vms.Kilo = 0;
+                    vms.Entregado = 0;
+                    vmpd.Add(vms);
+                }
+
+                //// CREAR PEDIDO
+                FabricaPedido pedidoCreado = await _pedidosServices.Crear(_mapper.Map<FabricaPedido>(vm), _mapper.Map<List<FabricaPedidosDetalle>>(vmpd));
+                vm = _mapper.Map<VMFabricaPedido>(pedidoCreado);
+
+                //// Resultado
+                gResponse.Estado = true;
+                gResponse.Mensaje = "El " + vm.Tipo + " fue creado";
+            }
+            catch (Exception ex)
+            {
+                gResponse.Estado = false;
+                gResponse.Mensaje = ex.Message;
+            }
+
+            return StatusCode(StatusCodes.Status200OK, gResponse);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditarPedido([FromBody] List<VMPedido> modelo)
+        {
+            GenericResponse<VMFabricaPedido> gResponse = new GenericResponse<VMFabricaPedido>();
+
+            try
+            {
+                // SEPARAR
+                VMFabricaPedido vm = new VMFabricaPedido();
+                vm.Tipo = modelo[0].TipoCabecera;
+                vm.Estado = modelo[0].EstadoCabecera;
+                vm.Cantidad = modelo[0].CantidadCabecera;
+                vm.Created = modelo[0].CreatedDetalle;
+                vm.Remito = 0;
+                vm.IdUsuario = 1; // Luego se modifica con los permisos para saber que usuario lo registro
+                vm.IdSucursal = 1; // Luego se modifica con los permisos para saber que sucursal lo registro
+
+                List<VMFabricaPedidoDetalle> vmpd = new List<VMFabricaPedidoDetalle>();
+                foreach (var i in modelo)
+                {
+                    VMFabricaPedidoDetalle vms = new VMFabricaPedidoDetalle();
+                    vms.Codigo = i.CodigoDetalle;
+                    vms.Cantidad = i.CantidadDetalle;
+                    vms.Created = DateTime.Parse(i.CreatedDetalle.ToString());
+                    vms.Kilo = 0;
+                    vms.Entregado = 0;
+                    vmpd.Add(vms);
+                }
+
+                //// EDITAR PEDIDO
+                FabricaPedido pedidoEditado = await _pedidosServices.Editar(_mapper.Map<FabricaPedido>(vm), _mapper.Map<List<FabricaPedidosDetalle>>(vmpd),
+                                                                            Int32.Parse(modelo[0].idSucursalEditar.ToString()) , Int32.Parse(modelo[0].numeroPedidoEditar.ToString()));
+                vm = _mapper.Map<VMFabricaPedido>(pedidoEditado);
+
+                //// Resultado
+                gResponse.Estado = true;
+                gResponse.Mensaje = "El " + vm.Tipo + " fue editado";
+            }
+            catch (Exception ex)
+            {
+                gResponse.Estado = false;
+                gResponse.Mensaje = ex.Message;
+            }
+
+            return StatusCode(StatusCodes.Status200OK, gResponse);
+        }
+
 
         private async Task<int> obtenerEmpresa(int idSucursal)
         {

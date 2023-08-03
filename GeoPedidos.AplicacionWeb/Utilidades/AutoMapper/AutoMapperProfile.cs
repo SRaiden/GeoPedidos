@@ -69,6 +69,26 @@ namespace GeoPedidos.AplicacionWeb.Utilidades.AutoMapper
                     destino.Created,
                     opt => opt.MapFrom(origen => origen.Created.Value.ToString("dd-MM-yyyy"))
                     ) ;
+
+            CreateMap<VMFabricaPedido, FabricaPedido>()
+                    .ForMember(destino =>
+                    destino.Created,
+                    opt => opt.MapFrom(origen => DateTime.Parse(origen.Created))
+                    );
+            #endregion
+
+            #region Fabrica_Pedidos_Detalle
+            CreateMap<FabricaPedidosDetalle, VMFabricaPedidoDetalle>()
+                    .ForMember(destino =>
+                    destino.Created,
+                    opt => opt.MapFrom(origen => origen.Created.Value.ToString("dd-MM-yyyy"))
+                    );
+
+            CreateMap<VMFabricaPedidoDetalle, FabricaPedidosDetalle>()
+                    .ForMember(destino =>
+                    destino.Created,
+                    opt => opt.MapFrom(origen => DateTime.Parse(origen.Created.ToString()))
+                    );
             #endregion
 
             #region Fabrica_TODOSLOSPRODUCTOS

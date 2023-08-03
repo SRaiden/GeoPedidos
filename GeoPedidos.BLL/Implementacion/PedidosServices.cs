@@ -17,20 +17,22 @@ namespace GeoPedidos.BLL.Implementacion
     public class PedidosServices : IPedidosServices
     {
         private readonly IGenericRepository<FabricaPedido> _pedidosRepository;
+        private readonly IGenericRepository<FabricaPedidosDetalle> _pedidosDetalleRepository;
         private readonly IGenericRepository<FabricaGusto> _gustosRepository;
         private readonly IGenericRepository<FabricaProducto> _productosRepository;
         private readonly IGenericRepository<FabricaInsumo> _insumosRepository;
         private readonly IGenericRepository<FabricaPasteleria> _pasteleriaRepository;
 
-        public PedidosServices(IGenericRepository<FabricaPedido> pedidosRepository, IGenericRepository<FabricaGusto> gustosRepository, 
-                                IGenericRepository<FabricaProducto> productosRepository, IGenericRepository<FabricaInsumo> insumosRepository, 
-                                IGenericRepository<FabricaPasteleria> pasteleriaRepository)
+        public PedidosServices(IGenericRepository<FabricaPedido> pedidosRepository, IGenericRepository<FabricaPedidosDetalle> pedidosDetalleRepository,  
+                                IGenericRepository<FabricaGusto> gustosRepository, IGenericRepository<FabricaProducto> productosRepository,
+                                IGenericRepository<FabricaInsumo> insumosRepository, IGenericRepository<FabricaPasteleria> pasteleriaRepository)
         {
             _pedidosRepository = pedidosRepository;
             _gustosRepository = gustosRepository;
             _productosRepository = productosRepository;
             _insumosRepository = insumosRepository;
             _pasteleriaRepository = pasteleriaRepository;
+            _pedidosDetalleRepository = pedidosDetalleRepository;
         }
 
         public async Task<List<FabricaGusto>> ObtenerHelados(int idEmpresa)
@@ -96,5 +98,88 @@ namespace GeoPedidos.BLL.Implementacion
             return fabricaPedido;
         }
 
+        public async Task<FabricaPedido> Crear(FabricaPedido entidad, List<FabricaPedidosDetalle> entidad_dos)
+        {
+            try
+            {
+                // OBTENER ULTIMO NUMERO DE PEDIDO DE LA SUCURSAL
+                IQueryable<FabricaPedido> query = await _pedidosRepository.Consultar();
+                string numPedido = query.Where(s => s.IdSucursal == entidad.IdSucursal).OrderByDescending(p => p.NumeroPedido).FirstOrDefault().NumeroPedido.ToString();
+                entidad.NumeroPedido = Int32.Parse(numPedido) + 1;
+
+                // CREAMOS LA CABEZERA
+                FabricaPedido pedidoCreado = await _pedidosRepository.Crear(entidad);
+                if (pedidoCreado.Id == 0)
+                    throw new TaskCanceledException("No se pudo crear el pedido");
+
+                // CREAMOS LOS DETALLES
+                for (int i = 0; i < entidad_dos.Count; i++)
+                {
+                    entidad_dos[i].IdPedido = pedidoCreado.Id;
+                    FabricaPedidosDetalle pedidoDetalleCreado = await _pedidosDetalleRepository.Crear(entidad_dos[i]);
+                    if (pedidoDetalleCreado.Id == 0)
+                        throw new TaskCanceledException("No se pudo crear el detalle del Pedido");
+                }
+               
+
+                return pedidoCreado;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        public async Task<List<FabricaPedidosDetalle>> ObtenerPedidos(int idSucursal, int numeroPedido)
+        {
+            // Buscar el ID del pedido
+            IQueryable<FabricaPedido> query = await _pedidosRepository.Consultar(); // obtengo todos los pedidos
+            int id = Int32.Parse(query.Where(p => p.IdSucursal == idSucursal && p.NumeroPedido == numeroPedido).First().Id.ToString());
+
+            IQueryable<FabricaPedidosDetalle> query2 = await _pedidosDetalleRepository.Consultar(); // obtengo todos los pedidos
+            return query2.Where(d => d.IdPedido == id).ToList();
+        }
+
+        public async Task<FabricaPedido> Editar(FabricaPedido entidad, List<FabricaPedidosDetalle> entidad_dos, int idSucursal, int numeroPedido)
+        {
+            try
+            {
+                // ACTUALIZAR CABECERA PEDIDO
+                IQueryable<FabricaPedido> query = await _pedidosRepository.Consultar();
+                FabricaPedido pedidoCabeceraEncontrado = query.Where(s => s.IdSucursal == idSucursal && s.NumeroPedido == numeroPedido).First();
+                pedidoCabeceraEncontrado.Cantidad = entidad.Cantidad;
+                pedidoCabeceraEncontrado.Modified = entidad.Created;
+                pedidoCabeceraEncontrado.Estado = entidad.Estado;
+                bool respuesta = await _pedidosRepository.Editar(pedidoCabeceraEncontrado);
+
+                if (!respuesta)
+                    throw new TaskCanceledException("No se pudo editar el pedido");
+
+
+
+                // ACTUALIZAR DETALLES DEL PEDIDO
+                IQueryable<FabricaPedidosDetalle> query2 = await _pedidosDetalleRepository.Consultar();
+                List<FabricaPedidosDetalle> pedidoDetalleEncontrado = query2.Where(s => s.IdPedido == pedidoCabeceraEncontrado.Id).ToList();
+                // BORRAMOS LOS REGISTROS QUE TENIA ANTES Y AGREGAMOS UNOS NUEVOS CON EL MISMO ID_PEDIDO
+                for (int i = 0; i < pedidoDetalleEncontrado.Count; i++)
+                {
+                    bool respuestaDetalle = await _pedidosDetalleRepository.Eliminar(pedidoDetalleEncontrado[i]);
+                }
+                // AGREGAMOS LOS NUEVOS PEDIDOS
+                for (int i = 0; i < entidad_dos.Count; i++)
+                {
+                    entidad_dos[i].IdPedido = pedidoCabeceraEncontrado.Id;
+                    FabricaPedidosDetalle pedidoDetalleCreado = await _pedidosDetalleRepository.Crear(entidad_dos[i]);
+                    if (pedidoDetalleCreado.Id == 0)
+                        throw new TaskCanceledException("No se pudo crear el detalle del Pedido");
+                }
+
+                return pedidoCabeceraEncontrado;
+            }
+            catch
+            {
+                throw;
+            }
+        }
     }
 }

@@ -10,5 +10,7 @@
 
         public string? Cantidad { get; set; }
 
+        public string? Pendiente { get; set; }
+
     }
 }

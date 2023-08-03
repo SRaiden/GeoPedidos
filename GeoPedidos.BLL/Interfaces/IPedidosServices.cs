@@ -10,10 +10,14 @@ namespace GeoPedidos.BLL.Interfaces
     public interface IPedidosServices
     {
         Task<List<FabricaPedido>> ObtenerPedidos(int iduser, int idSucursal, string tipo, string fechaDesde, string fechaHasta);
-
         Task<List<FabricaGusto>> ObtenerHelados(int idEmpresa);
         Task<List<FabricaProducto>> ObtenerProductos(int idEmpresa);
         Task<List<FabricaInsumo>> ObtenerInsumos(int idEmpresa);
         Task<List<FabricaPasteleria>> ObtenerPastelerias(int idEmpresa);
+        Task<List<FabricaPedidosDetalle>> ObtenerPedidos(int idSucursal, int numeroPedido);
+
+        //--//
+        Task<FabricaPedido> Crear(FabricaPedido entidad, List<FabricaPedidosDetalle> entidad_dos);
+        Task<FabricaPedido> Editar(FabricaPedido entidad, List<FabricaPedidosDetalle> entidad_dos, int idSucursal, int numeroPedido);
     }
 }
