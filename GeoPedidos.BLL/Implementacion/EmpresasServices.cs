@@ -13,10 +13,12 @@ namespace GeoPedidos.BLL.Implementacion
     public class EmpresasServices : IEmpresasServices
     {
         private readonly IGenericRepository<GeneralEmpresa> _repository;
+        private readonly IGenericRepository<GeneralSucursales> _sucursalRepository;
 
-        public EmpresasServices(IGenericRepository<GeneralEmpresa> repository)
+        public EmpresasServices(IGenericRepository<GeneralEmpresa> repository, IGenericRepository<GeneralSucursales> sucursalRepository)
         {
             _repository = repository;
+            _sucursalRepository = sucursalRepository;
         }
 
         public async Task<List<GeneralEmpresa>> Lista()
@@ -108,6 +110,12 @@ namespace GeoPedidos.BLL.Implementacion
         {
             IQueryable<GeneralEmpresa> query = await _repository.Consultar(); // obtengo todas las empresas
             return query.Where(i => i.Id == id).First().NombreEmpresa.ToString();
+        }
+
+        public async Task<GeneralSucursales> ObtenerDatoEmpresa(int idSucursal)
+        {
+            IQueryable<GeneralSucursales> query = await _sucursalRepository.Consultar();
+            return query.Where(i => i.Id == idSucursal).First();
         }
     }
 }

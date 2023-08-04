@@ -18,13 +18,17 @@ namespace GeoPedidos.AplicacionWeb.Controllers
         private readonly IPedidosServices _pedidosServices;
         private readonly ISucursalServices _sucursalServices;
         private readonly IFabricaUsuariosServices _usuariosServices;
+        private readonly IEmpresasServices _empresasServices;
 
-        public PedidosController(IMapper mapper, IPedidosServices pedidosServices, ISucursalServices sucursalServices, IFabricaUsuariosServices usuariosServices)
+        public PedidosController(IMapper mapper, IPedidosServices pedidosServices, ISucursalServices sucursalServices, 
+                                IFabricaUsuariosServices usuariosServices, IEmpresasServices empresasServices)
         {
             _mapper = mapper;
             _pedidosServices = pedidosServices;
             _sucursalServices = sucursalServices;
             _usuariosServices = usuariosServices;
+            _empresasServices = empresasServices;
+
         }
 
         public IActionResult Index()
@@ -84,9 +88,9 @@ namespace GeoPedidos.AplicacionWeb.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> ObtenerPedido(int idSucursal, int numeroPedido)
+        public async Task<IActionResult> ObtenerPedido(int idPedido)
         {
-            List<VMFabricaPedidoDetalle> vmPedidoDetalle = _mapper.Map<List<VMFabricaPedidoDetalle>>(await _pedidosServices.ObtenerPedidos(idSucursal, numeroPedido));
+            List<VMFabricaPedidoDetalle> vmPedidoDetalle = _mapper.Map<List<VMFabricaPedidoDetalle>>(await _pedidosServices.ObtenerPedidos(idPedido));
             return StatusCode(StatusCodes.Status200OK, vmPedidoDetalle);
         }
 
@@ -168,8 +172,7 @@ namespace GeoPedidos.AplicacionWeb.Controllers
                 }
 
                 //// EDITAR PEDIDO
-                FabricaPedido pedidoEditado = await _pedidosServices.Editar(_mapper.Map<FabricaPedido>(vm), _mapper.Map<List<FabricaPedidosDetalle>>(vmpd),
-                                                                            Int32.Parse(modelo[0].idSucursalEditar.ToString()) , Int32.Parse(modelo[0].numeroPedidoEditar.ToString()));
+                FabricaPedido pedidoEditado = await _pedidosServices.Editar(_mapper.Map<FabricaPedido>(vm), _mapper.Map<List<FabricaPedidosDetalle>>(vmpd), Int32.Parse(modelo[0].idPedido.ToString()));
                 vm = _mapper.Map<VMFabricaPedido>(pedidoEditado);
 
                 //// Resultado
@@ -185,6 +188,52 @@ namespace GeoPedidos.AplicacionWeb.Controllers
             return StatusCode(StatusCodes.Status200OK, gResponse);
         }
 
+        [HttpPost]
+        public async Task<IActionResult> Eliminar(int idPedido)
+        {
+            GenericResponse<string> gResponse = new GenericResponse<string>();
+
+            try
+            {
+                gResponse.Estado = await _pedidosServices.Eliminar(idPedido);
+            }
+            catch (Exception ex)
+            {
+                gResponse.Estado = false;
+                gResponse.Mensaje = ex.Message;
+            }
+
+            return StatusCode(StatusCodes.Status200OK, gResponse);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> VerDetallesPedido(int idPedido, string tipoPedido)
+        {
+            // saber que empresa pertenece la sucursal que pidio el producto
+            VMFabricaPedido pedidoCabecera = _mapper.Map<VMFabricaPedido>(await _pedidosServices.VerCabeceraPedido(idPedido));
+            VMGeneralSucursales datoSucursal = _mapper.Map<VMGeneralSucursales>(await _empresasServices.ObtenerDatoEmpresa(Int32.Parse(pedidoCabecera.IdSucursal.ToString())));
+
+            // obtener codigo y cantidad
+            List<VMFabricaPedidoDetalle> vmLista = _mapper.Map<List<VMFabricaPedidoDetalle>>(await _pedidosServices.VerDetallePedido(idPedido));
+
+            // obtener nombre y categoria - al estar en otras tablas, obtenemos los resultado
+            List<VMPedido> vmPedido = new List<VMPedido>();
+            for(int a=0; a<vmLista.Count; a++)
+            {
+                VMPedido vm = new VMPedido();
+                string resultado = await _pedidosServices.ObtenerDatoProducto(Int32.Parse(vmLista[a].Codigo.ToString()), tipoPedido.Replace("\\", "").Replace("\"", "").ToLower(), Int32.Parse(datoSucursal.EmpresaId.ToString()));
+                string[] separar = resultado.Split('@');
+
+                vm.CodigoDetalle = vmLista[a].Codigo;
+                vm.CantidadDetalle = vmLista[a].Cantidad;
+                vm.DescripcionDetalle = separar[0];
+                vm.CategoriaDetalle = separar[1];
+                vmPedido.Add(vm);
+            }
+
+            // enviar
+            return StatusCode(StatusCodes.Status200OK, new { data = vmPedido });
+        }
 
         private async Task<int> obtenerEmpresa(int idSucursal)
         {

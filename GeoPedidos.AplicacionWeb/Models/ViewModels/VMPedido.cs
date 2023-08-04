@@ -16,11 +16,14 @@
 
         public int? CantidadDetalle { get; set; }
 
+        public string? DescripcionDetalle { get; set; }
+
+        public string? CategoriaDetalle { get; set; }
+
         public string? CreatedDetalle { get; set; }
 
         //-------------------------------- EDITAR ------------------------------------ //
 
-        public int? numeroPedidoEditar { get; set; }
-        public int? idSucursalEditar { get; set; }
+        public int? idPedido { get; set; }
     }
 }
