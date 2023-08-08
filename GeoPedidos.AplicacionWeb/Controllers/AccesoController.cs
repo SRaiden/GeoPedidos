@@ -50,7 +50,8 @@ namespace GeoPedidos.AplicacionWeb.Controllers
             {
                 new Claim(ClaimTypes.Name, usuarioEncontrado.Nombre),
                 new Claim(ClaimTypes.NameIdentifier, usuarioEncontrado.Id.ToString()),
-                new Claim(ClaimTypes.Role, rol.ToString())
+                new Claim(ClaimTypes.Role, rol.ToString()),
+                new Claim(ClaimTypes.Surname, usuarioEncontrado.IdSucursal.ToString())
             };
             ClaimsIdentity cIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
             AuthenticationProperties properties = new AuthenticationProperties()

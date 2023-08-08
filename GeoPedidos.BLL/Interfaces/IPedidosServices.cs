@@ -9,7 +9,7 @@ namespace GeoPedidos.BLL.Interfaces
 {
     public interface IPedidosServices
     {
-        Task<List<FabricaPedido>> ObtenerPedidos(int iduser, int idSucursal, string tipo, string fechaDesde, string fechaHasta);
+        Task<List<FabricaPedido>> ObtenerPedidos(int iduser, int idSucursal, int idEmpresa, string tipo, string fechaDesde, string fechaHasta);
         Task<List<FabricaGusto>> ObtenerHelados(int idEmpresa);
         Task<List<FabricaProducto>> ObtenerProductos(int idEmpresa);
         Task<List<FabricaInsumo>> ObtenerInsumos(int idEmpresa);
@@ -22,5 +22,6 @@ namespace GeoPedidos.BLL.Interfaces
         Task<List<FabricaPedidosDetalle>> VerDetallePedido(int idPedido);
         Task<FabricaPedido> VerCabeceraPedido(int idPedido);
         Task<bool> Eliminar(int idPedido);
+        //--//
     }
 }

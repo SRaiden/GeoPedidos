@@ -369,6 +369,10 @@
       "PackagePath": "staticwebassets\\js\\vistas\\Pedidos_Index.js"
     },
     {
+      "Id": "C:\\Users\\Nata\\OneDrive\\Documentos\\GitHub\\GeoPedidos\\GeoPedidos.AplicacionWeb\\wwwroot\\js\\vistas\\Reporte_Index.js",
+      "PackagePath": "staticwebassets\\js\\vistas\\Reporte_Index.js"
+    },
+    {
       "Id": "C:\\Users\\Nata\\OneDrive\\Documentos\\GitHub\\GeoPedidos\\GeoPedidos.AplicacionWeb\\wwwroot\\js\\vistas\\Usuarios_Index.js",
       "PackagePath": "staticwebassets\\js\\vistas\\Usuarios_Index.js"
     },

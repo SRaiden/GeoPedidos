@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "0s2zf9KPOrc8i3IuTJblYbkhYJYpFfjI1QcjChMB7OM=",
+  "Hash": "OkfLW6Vz9fDejJnhoWbIynxN/Y2ucqCs4JNenklIj0Q=",
   "Source": "GeoPedidos.AplicacionWeb",
   "BasePath": "_content/GeoPedidos.AplicacionWeb",
   "Mode": "Default",
@@ -1613,6 +1613,23 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\js\\vistas\\Pedidos_Index.js"
+    },
+    {
+      "Identity": "C:\\Users\\Nata\\OneDrive\\Documentos\\GitHub\\GeoPedidos\\GeoPedidos.AplicacionWeb\\wwwroot\\js\\vistas\\Reporte_Index.js",
+      "SourceId": "GeoPedidos.AplicacionWeb",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\Nata\\OneDrive\\Documentos\\GitHub\\GeoPedidos\\GeoPedidos.AplicacionWeb\\wwwroot\\",
+      "BasePath": "_content/GeoPedidos.AplicacionWeb",
+      "RelativePath": "js/vistas/Reporte_Index.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\js\\vistas\\Reporte_Index.js"
     },
     {
       "Identity": "C:\\Users\\Nata\\OneDrive\\Documentos\\GitHub\\GeoPedidos\\GeoPedidos.AplicacionWeb\\wwwroot\\js\\vistas\\Usuarios_Index.js",

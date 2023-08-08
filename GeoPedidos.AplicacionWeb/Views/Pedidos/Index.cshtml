@@ -16,20 +16,39 @@
 <div class="content-wrapper">
     <!-- BUSQUEDA -->
     <div class="card mb-4">
+        <input id="userLogin" value="@ViewBag.user" hidden />
+        <input id="rolLogin" value="@ViewBag.rolLogin" hidden />
         <h5 class="card-header">Busqueda de Pedidos</h5>
         <br />
         <div class="card-body">
             <div class="row gx-3 gy-2 align-items-center">
-                <div class="col-md-3">
-                    <label class="form-label" for="selectTypeOpt">Empresas</label>
-                    <select id="cboEmpresas" class="form-select color-dropdown">
-                    </select>
-                </div>
-                <div class="col-md-3">
-                    <label class="form-label" for="selectPlacement">Sucursales</label>
-                    <select class="form-select placement-dropdown" id="cboSucursales">
-                    </select>
-                </div>
+                @if (ViewBag.idEmpresaLogin == "0" && ViewBag.idSucursalLogin == "0") // soy SuperAdmin
+                {
+                    <div class="d-grid gap-2 col-lg-6 mx-auto">
+                        <label class="form-label" for="selectTypeOpt">Empresas</label>
+                        <select id="cboEmpresas" class="form-select color-dropdown">
+                        </select>
+                    </div>
+
+                    <div class="d-grid gap-2 col-lg-6 mx-auto">
+                        <label class="form-label" for="selectPlacement">Sucursales</label>
+                        <select class="form-select placement-dropdown" id="cboSucursales">
+                        </select>
+                    </div>
+                }
+                else if (ViewBag.idSucursalLogin == "0") // Soy Admin de Sucursales
+                {
+                    <div class="d-grid gap-2 col-lg-6 mx-auto">
+                        <label class="form-label" for="selectPlacement">Sucursales</label>
+                        <select class="form-select placement-dropdown" id="cboSucursales">
+                        </select>
+                    </div>
+                    <input id="cboEmpresas" value="@ViewBag.idEmpresaLogin" hidden />
+                }
+                else{ // Soy User
+                    <input id="cboSucursales" value="@ViewBag.idSucursalLogin" hidden />
+                    <input id="cboEmpresas" value="@ViewBag.idEmpresaLogin" hidden />
+                }
             </div>
 
             <!-- Radio -->
@@ -39,7 +58,7 @@
                         <div class="demo-vertical-spacing">
                             <!-- Radio -->
                             <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
-                                <input type="radio" class="btn-check" name="rbReporte" id="rbTodos" checked/>
+                                <input type="radio" class="btn-check" name="rbReporte" id="rbTodos"/>
                                 <label class="btn btn-outline-primary" for="rbTodos">Todos</label>
                                 <input type="radio" class="btn-check" name="rbReporte" id="rbHelados"  />
                                 <label class="btn btn-outline-primary" for="rbHelados">Helados</label>
@@ -59,22 +78,18 @@
             <br />
 
             <!-- Date -->
-            <div class="row gy-3 gy-2 align-items-center">
-                <div class="col-md">
-                    <label for="html5-date-input" class="form-label">Desde</label>
-                    <div class="col-md-10">
-                        <input class="form-control" type="date" id="txtDesde" />
-                    </div>
+            <div class="row gx-3 gy-2 align-items-center">
+                <div class="d-grid gap-2 col-lg-6 mx-auto">
+                    <label for="form-label" class="form-label">Desde</label>
+                <input class="form-control" type="date" id="txtDesde" />
                 </div>
-                <div class="col-md">
-                    <label for="html5-date-input" class="form-label">Hasta</label>
-                    <div class="col-md-10">
-                        <input class="form-control" type="date" id="txtHasta" />
-                    </div>
+
+                <div class="d-grid gap-2 col-lg-6 mx-auto">
+                    <label for="form-label" class="form-label">Hasta</label>
+                    <input class="form-control" type="date" id="txtHasta" />
                 </div>
             </div>
             <!-- /Date -->
-
         </div>
     </div>
     <!--/ BUSQUEDA -->
@@ -82,14 +97,18 @@
 
     <!-- TABLA -->
     <div class="card">
-        <div class="card-body">
-            <div class="demo-inline-spacing">
-                <button type="button" class="btn rounded-pill btn-success" id="btnHelado">Agregar Helado</button>
-                <button type="button" class="btn rounded-pill btn-success" id="btnProducto">Agregar Producto</button>
-                <button type="button" class="btn rounded-pill btn-success" id="btnInsumo">Agregar Insumo</button>
-                <button type="button" class="btn rounded-pill btn-success" id="btnPasteleria">Agregar Pasteleria</button>
+        @if (ViewBag.rolLogin == "1") // SOY USER?
+        {
+            <div class="card-body">
+                <div class="demo-inline-spacing">
+                    <button type="button" class="btn rounded-pill btn-success" id="btnHelado">Agregar Helado</button>
+                    <button type="button" class="btn rounded-pill btn-success" id="btnProducto">Agregar Producto</button>
+                    <button type="button" class="btn rounded-pill btn-success" id="btnInsumo">Agregar Insumo</button>
+                    <button type="button" class="btn rounded-pill btn-success" id="btnPasteleria">Agregar Pasteleria</button>
+                </div>
             </div>
-        </div>
+        }
+
 @*        <h5 class="card-header">RESULTADOS</h5>*@
         <div class="table-responsive text-nowrap">
             <table class="table" id="tbdata">
@@ -113,6 +132,8 @@
 
     </div>
     <!--/ TABLA -->
+
+    <button type="button" id="Reporte" hidden> Reporte </button>
 </div>
 
 

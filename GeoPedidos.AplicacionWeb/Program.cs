@@ -23,8 +23,7 @@ builder.Services.AddAutoMapper(typeof(AutoMapperProfile));// Ejecutar AUTOMAPPER
 
 var context = new CustomAssemblyLoadContext();
 context.LoadUnmanagedLibrary(Path.Combine(Directory.GetCurrentDirectory(), "Utilidades/LibreriaPDF/libwkhtmltox.dll"));
-builder.Services.AddSingleton(typeof(IConverter), new SynchronizedConverter(new PdfTools())); // AGREGAR LIBRERIA PDF
-
+builder.Services.AddSingleton(typeof(IConverter), new SynchronizedConverter(new PdfTools())); // AGREGA LIBRERIA PDF
 
 var app = builder.Build();
 

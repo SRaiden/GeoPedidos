@@ -1,0 +1,44 @@
+﻿<!-- Dashboard -->
+<li class="menu-item active">
+    <a asp-action="Index" asp-controller="Pedidos" class="menu-link">
+        <i class="menu-icon tf-icons bx bx-home-circle"></i>
+        <div data-i18n="Analytics">Pedidos</div>
+    </a>
+</li>
+
+@if (ViewBag.user == "1")
+{
+    <li class="menu-header small text-uppercase">
+        <span class="menu-header-text">Listados</span>
+    </li>
+
+    <!-- Empresa -->
+    <li class="menu-item">
+        <a asp-action="Index" asp-controller="Empresas" class="menu-link">
+            <i class="menu-icon tf-icons bx bx-layout"></i>
+            <div data-i18n="ListadoEmpresas">Empresas</div>
+        </a>
+    </li>
+
+    <!-- Usuarios -->
+    <li class="menu-item">
+        <a asp-action="Index" asp-controller="Usuarios" class="menu-link">
+            <i class="menu-icon tf-icons bx bx-dock-top"></i>
+            <div data-i18n="ListadoUsuarios">Usuarios</div>
+        </a>
+    </li>
+}
+else if (ViewBag.rol == "0")
+{
+    <li class="menu-header small text-uppercase">
+        <span class="menu-header-text">Listados</span>
+    </li>
+
+    <!-- Usuarios -->
+    <li class="menu-item">
+        <a asp-action="Index" asp-controller="Usuarios" class="menu-link">
+            <i class="menu-icon tf-icons bx bx-dock-top"></i>
+            <div data-i18n="ListadoUsuarios">Usuarios</div>
+        </a>
+    </li>
+}

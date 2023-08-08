@@ -8,6 +8,10 @@ using GeoPedidos.Entity;
 using Microsoft.AspNetCore.Authorization;
 using GeoPedidos.BLL.Implementacion;
 using Newtonsoft.Json.Linq;
+using System.Security.Claims;
+
+using DinkToPdf;
+using DinkToPdf.Contracts;
 
 namespace GeoPedidos.AplicacionWeb.Controllers
 {
@@ -19,27 +23,62 @@ namespace GeoPedidos.AplicacionWeb.Controllers
         private readonly ISucursalServices _sucursalServices;
         private readonly IFabricaUsuariosServices _usuariosServices;
         private readonly IEmpresasServices _empresasServices;
+        private readonly IConverter _converter;
 
         public PedidosController(IMapper mapper, IPedidosServices pedidosServices, ISucursalServices sucursalServices, 
-                                IFabricaUsuariosServices usuariosServices, IEmpresasServices empresasServices)
+                                IFabricaUsuariosServices usuariosServices, IEmpresasServices empresasServices, IConverter converter)
         {
             _mapper = mapper;
             _pedidosServices = pedidosServices;
             _sucursalServices = sucursalServices;
             _usuariosServices = usuariosServices;
             _empresasServices = empresasServices;
-
+            _converter = converter;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
+            // PARA OPCIONES DE QUE MOSTRAR EN EL LOGIN
+            ClaimsPrincipal claimPrin = HttpContext.User;
+            string idUser = "";
+            string nombreUser = "";
+            string IdSucursal = "";
+            string idEmpresa = "";
+            string rol = "";
+
+            if (claimPrin.Identity.IsAuthenticated) // se logeo??
+            { 
+
+                // OBTENGO ID USER AL LOGEAR POR MEDIO DEL CLAIMPS
+                idUser = claimPrin.Claims.Where(c => c.Type == ClaimTypes.NameIdentifier).Select(c => c.Value).SingleOrDefault();
+
+                // OBTENGO SU NOMBRE
+                nombreUser = claimPrin.Claims.Where(c => c.Type == ClaimTypes.Name).Select(c => c.Value).SingleOrDefault();
+
+                // OBTENGO IDSUCURSAL
+                IdSucursal = claimPrin.Claims.Where(c => c.Type == ClaimTypes.Surname).Select(c => c.Value).SingleOrDefault();
+
+                // OBTENGO ROL (0 -> ADMIN, 1 -> USER)
+                rol = claimPrin.Claims.Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value).SingleOrDefault();
+
+                // Busco el IDEMPRESA (ESTO ES PARA SUPERADMIN)
+                FabricaUsuario datoUsuario = await _usuariosServices.DatoUsuario(Int32.Parse(idUser));
+                idEmpresa = datoUsuario.IdEmpresa.ToString();
+            }
+
+            ViewBag.user = idUser;
+            ViewBag.nombreUser = nombreUser;
+            ViewBag.idSucursalLogin = IdSucursal;
+            ViewBag.idEmpresaLogin = idEmpresa;
+            ViewBag.rolLogin = rol;
+
             return View();
         }
 
         [HttpGet]
-        public async Task<IActionResult> Busqueda(int IdUsuario, int idSucursal, string tipo, string fechaDesde, string fechaHasta)
+        public async Task<IActionResult> Busqueda(int IdUsuario, int idSucursal, int idEmpresa, string tipo, string fechaDesde, string fechaHasta)
         {
-            List<VMFabricaPedido> vmListaProductos = _mapper.Map<List<VMFabricaPedido>>(await _pedidosServices.ObtenerPedidos(IdUsuario, idSucursal, tipo.Replace("\\", "").Replace("\"", ""), fechaDesde.Replace("\\", "").Replace("\"", ""), fechaHasta.Replace("\\", "").Replace("\"", "")));
+            List<VMFabricaPedido> vmListaProductos = _mapper.Map<List<VMFabricaPedido>>(await _pedidosServices.ObtenerPedidos(IdUsuario, idSucursal, idEmpresa, tipo.Replace("\\", "").Replace("\"", ""), fechaDesde.Replace("\\", "").Replace("\"", ""), fechaHasta.Replace("\\", "").Replace("\"", "")));
             foreach(var i in vmListaProductos)
             {
                 i.NombreSucursal = await _sucursalServices.ObtenerNombreSucursal(Int32.Parse(i.IdSucursal.ToString()));
@@ -51,7 +90,7 @@ namespace GeoPedidos.AplicacionWeb.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> CargarHelado(int idSucursal = 1)
+        public async Task<IActionResult> CargarHelado(int idSucursal)
         {
             // obtener empresa
             int idEmpresa = await obtenerEmpresa(idSucursal);
@@ -103,6 +142,20 @@ namespace GeoPedidos.AplicacionWeb.Controllers
 
             try
             {
+                ClaimsPrincipal claimPrin = HttpContext.User;
+                string idUser = "";
+                string IdSucursal = "";;
+
+                if (claimPrin.Identity.IsAuthenticated) // se logeo??
+                {
+
+                    // OBTENGO ID USER AL LOGEAR POR MEDIO DEL CLAIMPS
+                    idUser = claimPrin.Claims.Where(c => c.Type == ClaimTypes.NameIdentifier).Select(c => c.Value).SingleOrDefault();
+
+                    // OBTENGO IDSUCURSAL
+                    IdSucursal = claimPrin.Claims.Where(c => c.Type == ClaimTypes.Surname).Select(c => c.Value).SingleOrDefault();
+                }
+
                 // SEPARAR
                 VMFabricaPedido vm = new VMFabricaPedido();
                 vm.Tipo = modelo[0].TipoCabecera;
@@ -110,8 +163,8 @@ namespace GeoPedidos.AplicacionWeb.Controllers
                 vm.Cantidad = modelo[0].CantidadCabecera;
                 vm.Created = modelo[0].CreatedDetalle;
                 vm.Remito = 0;
-                vm.IdUsuario = 1; // Luego se modifica con los permisos para saber que usuario lo registro
-                vm.IdSucursal = 1; // Luego se modifica con los permisos para saber que sucursal lo registro
+                vm.IdUsuario = Int32.Parse(idUser);
+                vm.IdSucursal = Int32.Parse(IdSucursal);
 
                 List<VMFabricaPedidoDetalle> vmpd = new List<VMFabricaPedidoDetalle>();
                 foreach(var i in modelo)
@@ -149,6 +202,20 @@ namespace GeoPedidos.AplicacionWeb.Controllers
 
             try
             {
+                ClaimsPrincipal claimPrin = HttpContext.User;
+                string idUser = "";
+                string IdSucursal = ""; ;
+
+                if (claimPrin.Identity.IsAuthenticated) // se logeo??
+                {
+
+                    // OBTENGO ID USER AL LOGEAR POR MEDIO DEL CLAIMPS
+                    idUser = claimPrin.Claims.Where(c => c.Type == ClaimTypes.NameIdentifier).Select(c => c.Value).SingleOrDefault();
+
+                    // OBTENGO IDSUCURSAL
+                    IdSucursal = claimPrin.Claims.Where(c => c.Type == ClaimTypes.Surname).Select(c => c.Value).SingleOrDefault();
+                }
+
                 // SEPARAR
                 VMFabricaPedido vm = new VMFabricaPedido();
                 vm.Tipo = modelo[0].TipoCabecera;
@@ -156,8 +223,8 @@ namespace GeoPedidos.AplicacionWeb.Controllers
                 vm.Cantidad = modelo[0].CantidadCabecera;
                 vm.Created = modelo[0].CreatedDetalle;
                 vm.Remito = 0;
-                vm.IdUsuario = 1; // Luego se modifica con los permisos para saber que usuario lo registro
-                vm.IdSucursal = 1; // Luego se modifica con los permisos para saber que sucursal lo registro
+                vm.IdUsuario =  Int32.Parse(idUser);
+                vm.IdSucursal = Int32.Parse(IdSucursal);
 
                 List<VMFabricaPedidoDetalle> vmpd = new List<VMFabricaPedidoDetalle>();
                 foreach (var i in modelo)
@@ -234,6 +301,28 @@ namespace GeoPedidos.AplicacionWeb.Controllers
             // enviar
             return StatusCode(StatusCodes.Status200OK, new { data = vmPedido });
         }
+
+        public IActionResult MostrarPDFPedido(int idPedido)
+        {
+            string urlPlantillaVista = $"{this.Request.Scheme}://{this.Request.Host}/Plantilla/PDFPedido?idPedido={idPedido}";
+            var pdf = new HtmlToPdfDocument()
+            {
+                GlobalSettings = new GlobalSettings() { 
+                    PaperSize = PaperKind.A4,
+                    Orientation = Orientation.Portrait
+                },
+                Objects = { 
+                    new ObjectSettings(){ 
+                        Page = urlPlantillaVista
+                    }
+                }
+            };
+
+            var archivoPDF = _converter.Convert(pdf);
+            return File(archivoPDF, "application/pdf");
+        }
+
+        //------------------------------------  / ABM ---------------------------------------------------//
 
         private async Task<int> obtenerEmpresa(int idSucursal)
         {

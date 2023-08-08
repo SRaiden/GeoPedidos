@@ -1,6 +1,7 @@
 ﻿const modelBase = {
     idUsuario: 0,
     idSucursal: 0,
+    idEmpresa: 0,
     tipo: "",
     FechaDesde: "",
     FechaHasta: ""
@@ -9,6 +10,13 @@
 let tablaData;
 let tablaDataVer;
 let tablaDataPedido;
+
+// PARA LOGIN
+var empLogin = $("#cboEmpresas").val();
+var sucLogin = $("#cboSucursales").val();
+var userLogin = $("#userLogin").val();
+var rolLogin = $("#rolLogin").val();
+
 
 $(document).ready(function () {
     // Obtener la fecha de hoy
@@ -26,42 +34,48 @@ $(document).ready(function () {
     $('#txtDesde').val(fechaFormateada);
     $('#txtHasta').val(fechahoyFormateada);
 
-    fetch("/Usuarios/ObtenerTodasEmpresas")
-    .then(response => {
-        return response.ok ? response.json() : Promise.reject(response);
-    })
-    .then(responseJson => { // creamos un response a la bbdd
-        if (responseJson.length > 0) { // encontro datos en la bbdd?
-            responseJson.sort((a, b) => a.nombreEmpresa.localeCompare(b.nombreEmpresa));
-            responseJson.forEach((item) => {
-                $("#cboEmpresas").append( // hacemos llamado a la etiqueta cbroRol
-                    // cargamos el comboBox en tiempo de ejecucion con las columnas idrol (como value) y descripcion (como text)
-                    $("<option>").val(item.id).text(item.nombreEmpresa)
-                )
+    if (empLogin == null && sucLogin == null) { // SOY SUPERADMIN
+        fetch("/Usuarios/ObtenerTodasEmpresas")
+            .then(response => {
+                return response.ok ? response.json() : Promise.reject(response);
             })
-        }
-    })
+            .then(responseJson => {
+                if (responseJson.length > 0) {
+                    responseJson.sort((a, b) => a.nombreEmpresa.localeCompare(b.nombreEmpresa));
+                    responseJson.forEach((item) => {
+                        $("#cboEmpresas").append(
+                            $("<option>").val(item.id).text(item.nombreEmpresa)
+                        )
+                    })
+                }
+            })
+        if (empLogin == null) empLogin = "7"; // si soy superadmin, por orden alfabetico la empresa con id -> 7 es la primera para que carge bien
+    }
 
-    fetch(`/Usuarios/ObtenerSucursalEmpresa?idEmpresa=1`, {  
-        method: "GET"
-    })
-    .then(response => {
-        return response.ok ? response.json() : Promise.reject(response);
-    })
-    .then(responseJson => { // creamos un response a la bbdd
-        $('#cboSucursales').empty();
-        $("#cboSucursales").append(
-            $("<option>").val(0).text("- TODAS LAS SUCURSALES -") // OPTION DE ADMINISTRADOR
-        )
-        if (responseJson.length > 0) { // encontro datos en la bbdd?
-            responseJson.sort((a, b) => a.nombreSucursal.localeCompare(b.nombreSucursal));
-            responseJson.forEach((item) => {
-                $("#cboSucursales").append( // hacemos llamado a la etiqueta cbroRol
-                    $("<option>").val(item.id).text(item.nombreSucursal)
-                )
-            })
-        }
-    })
+    if(empLogin != null && sucLogin == null)
+    { // SOY ADMIN DE SUCURSALES
+        
+        fetch(`/Usuarios/ObtenerSucursalEmpresa?idEmpresa=${empLogin}`, {
+            method: "GET"
+        })
+        .then(response => {
+            return response.ok ? response.json() : Promise.reject(response);
+        })
+        .then(responseJson => { // creamos un response a la bbdd
+            $('#cboSucursales').empty();
+            $("#cboSucursales").append(
+                $("<option>").val(0).text("- TODAS LAS SUCURSALES -") // OPTION DE ADMINISTRADOR
+            )
+            if (responseJson.length > 0) { // encontro datos en la bbdd?
+                responseJson.sort((a, b) => a.nombreSucursal.localeCompare(b.nombreSucursal));
+                responseJson.forEach((item) => {
+                    $("#cboSucursales").append( // hacemos llamado a la etiqueta cbroRol
+                        $("<option>").val(item.id).text(item.nombreSucursal)
+                    )
+                })
+            }
+        })
+    }
 });
 
 //MODIFICAR SUCURSAL SEGUN EMPRESA ELEGIDA
@@ -69,7 +83,6 @@ $("#cboEmpresas").on("change", function () {
     var optionEmpresa = $(this).find(":selected").val()
     cargarSucursales(optionEmpresa)
 });
-
 
 function cargarSucursales(idEmpresa) {
     fetch(`/Usuarios/ObtenerSucursalEmpresa?idEmpresa=${idEmpresa}`, {  // ELIMINAR USUARIO
@@ -94,6 +107,10 @@ function cargarSucursales(idEmpresa) {
         });
 };
 
+$("#cboEmpresas").on("change", function () {
+    busqueda();
+});
+
 $("#cboSucursales").on("change", function () {
     busqueda();
 });
@@ -110,11 +127,20 @@ $("#txtHasta").blur(function () {
     busqueda();
 });
 
+//--//
+
+
 function busqueda() {
 
     const modelo = structuredClone(modelBase);
-    modelo["idUsuario"] = 0
-    modelo["idSucursal"] = parseInt($("#cboSucursales").val())
+    modelo["idUsuario"] = parseInt(userLogin);
+    modelo["idEmpresa"] = parseInt($("#cboEmpresas").val());
+
+    if (sucLogin == null) { // soy algun admin
+        modelo["idSucursal"] = parseInt($("#cboSucursales").val())
+    } else { // soy user
+        modelo["idSucursal"] = sucLogin;
+    }
 
     if ($('#rbTodos').prop('checked')) modelo["tipo"] = "todos"
     else if ($('#rbHelados').prop('checked')) modelo["tipo"] = "helado"
@@ -128,7 +154,7 @@ function busqueda() {
     tablaData = $('#tbdata').DataTable({
         responsive: true,
         "ajax": {
-            "url": `/Pedidos/Busqueda?IdUsuario=${modelo.IdUsuario}&idSucursal=${modelo.idSucursal}&tipo="${modelo.tipo}"&fechaDesde="${modelo.FechaDesde}"&fechaHasta="${modelo.FechaHasta}"`,
+            "url": `/Pedidos/Busqueda?idUsuario=${modelo.idUsuario}&idSucursal=${modelo.idSucursal}&idEmpresa=${modelo.idEmpresa}&tipo="${modelo.tipo}"&fechaDesde="${modelo.FechaDesde}"&fechaHasta="${modelo.FechaHasta}"`,
             "type": "GET",
             "datatype": "json"
         },
@@ -196,21 +222,30 @@ function busqueda() {
 
             for (var p = 0; p < data.length; p++) {
                 var row = table.row(p);
-                var pendiente = ($(row.node()).find('[class="pendiente"]').text());
+                var estado = ($(row.node()).find('[class="pendiente"]').text());
 
-                if (pendiente == "Pendiente") {
-                    $(row.node()).find('.btn-editar').show();
-                    $(row.node()).find('.btn-eliminar').show();
-                } else {
-                    $(row.node()).find('.btn-editar').hide();
-                    $(row.node()).find('.btn-eliminar').hide();
-                }
-
-                if (pendiente == "Anulado") {
+                // los pedidos en estado pendiente se pueden editar o eliminar, los otros no
+                // Soy User?
+                if (estado == "Anulado") {
                     $(row.node()).find('.btn-eliminar').hide();
                     $(row.node()).find('.btn-editar').hide();
                     $(row.node()).find('.btn-reporte').hide();
+                } 
+
+                if (estado != "Anulado" && estado != "Pendiente") {
+                    $(row.node()).find('.btn-editar').hide();
+                    $(row.node()).find('.btn-eliminar').hide();
                 }
+
+                if (rolLogin == "0") {
+                    if (estado == "Pendiente") {
+                        $(row.node()).find('.btn-editar').hide();
+                        $(row.node()).find('.btn-eliminar').show();
+                    }
+                } else {
+                    $(row.node()).find('.btn-editar').show();
+                    $(row.node()).find('.btn-eliminar').show();
+                } 
             }
         }
     });
@@ -292,8 +327,10 @@ $("#tbdata tbody").on("click", ".btn-editar", function () {
     }
     const data = tablaData.row(filaSeleccionada).data();
 
-    mostrarModal();
-    cargarElementos(data.tipo, data.id, "Editar");
+    if (rolLogin != 0) {
+        mostrarModal();
+        cargarElementos(data.tipo, data.id, "Editar");
+    }
 
 });
 
@@ -310,6 +347,29 @@ $("#tbdata tbody").on("click", ".btn-ver", function () {
     cargarElementos(data.tipo, data.id, "Ver");
 
 });
+
+// REPORTE
+$("#tbdata tbody").on("click", ".btn-reporte", function () {
+    if ($(this).closest("tr").hasClass("child")) {
+        filaSeleccionada = $(this).closest("tr").prev();
+    } else {
+        filaSeleccionada = $(this).closest("tr");
+    }
+    const data = tablaData.row(filaSeleccionada).data();
+
+    fetch(`/Pedidos/MostrarPDFPedido?idPedido=${data.id}`, {
+        method: "POST"
+    })
+    .then(response => response.blob())
+    .then(blob => {
+        const url = URL.createObjectURL(blob);
+        window.open(url, "_blank");
+    })
+
+    //$("#Reporte").attr("href", `/Pedidos/MostrarPDFPedido?idPedido=${data.id}`)
+    //$("#Reporte").attr("target", "_blank");
+});
+
 
 // ELIMINAR
 $("#tbdata tbody").on("click", ".btn-eliminar", function () {
@@ -336,7 +396,7 @@ $("#tbdata tbody").on("click", ".btn-eliminar", function () {
             if (respuesta) {
                 $(".showSweetAlert").LoadingOverlay("show");
 
-                fetch(`/Pedidos/Eliminar?idPedido=${data.id}`, {  // ELIMINAR USUARIO
+                fetch(`/Pedidos/Eliminar?idPedido=${data.id}`, {
                     method: "POST"
                 })
                 .then(response => {
@@ -345,7 +405,6 @@ $("#tbdata tbody").on("click", ".btn-eliminar", function () {
                 })
                 .then(responseJson => {
                     if (responseJson.estado) {
-                        //tablaData.row(fila).remove().draw() // actualizamos la fila seleccionada anteriormente
                         swal("Listo!", "El pedido fue eliminado", "success")
                     } else {
                         swal("Lo sentimos!", responseJson.mensaje, "error")
@@ -361,10 +420,11 @@ function cargarElementos(elemento, idPedido = null, tipo = null) {
     modelo["idSucursal"] = parseInt($("#cboSucursales").val())
 
     if (tipo == null || tipo == "Editar" || tipo == "Agregar") {
+
         tablaDataPedido = $('#tbPedido').DataTable({
             responsive: true,
             "ajax": {
-                "url": "/Pedidos/Cargar" + elemento + `?idSucursal=1`, // MODIFICAR SUCURSAL CUANDO COLOQUEMOS PERMISOS
+                "url": "/Pedidos/Cargar" + elemento + `?idSucursal=${sucLogin}`,
                 "type": "GET",
                 "datatype": "json"
             },
@@ -417,7 +477,7 @@ function cargarElementos(elemento, idPedido = null, tipo = null) {
             initComplete: function () {
                 if (idPedido != null) {
 
-                    fetch(`/Pedidos/ObtenerPedido?idPedido=${idPedido}`, {  // MODIFICAR SUCURSAL CUANDO COLOQUEMOS PERMISOS
+                    fetch(`/Pedidos/ObtenerPedido?idPedido=${idPedido}`, { 
                         method: "GET"
                     })
                         .then(response => {
@@ -512,7 +572,6 @@ $("#btnPendiente").click(function () {
 });
 
 
-// GUARDAR EN UNA MATRIZ LOS ELEMENTOS QUE ELEGISTE Y LA OPCION QUE ELIGIO
 const guardarDetalle = {
     codigoDetalle: 0,
     cantidadDetalle: 0,
@@ -554,7 +613,7 @@ function guardarElementos(element = null) {
         var row = table.row(p);
         var checkbox = $(row.node()).find('input[type="checkbox"][name="checking"]');
 
-        if (checkbox.prop("checked")) { // esta checkeado la fila?
+        if (checkbox.prop("checked")) {
             var pedidoDetalle = Object.assign({}, guardarDetalle);
 
             pedidoDetalle.codigoDetalle = parseInt($(row.node()).find('[class="codigo"]').text());
@@ -619,3 +678,4 @@ function guardarElementos(element = null) {
     }
 
 }
+
