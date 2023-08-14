@@ -27,10 +27,16 @@ namespace GeoPedidos.BLL.Implementacion
             _correoServices = correoServices;
         }
 
-        public async Task<List<FabricaUsuario>> Lista()
+        public async Task<List<FabricaUsuario>> Lista(int idEmpresa = 0)
         {
             IQueryable<FabricaUsuario> query = await _repository.Consultar(); // Obtengo todos los usuarios
-            return query.ToList(); // retorno la tabla Rol y su tabla de detalleRol por medio del FK (include)
+            if (idEmpresa == 0) // Soy SUPERADMIN
+            {
+                return query.ToList(); // retorno la tabla Rol y su tabla de detalleRol por medio del FK (include)
+            }
+            else { // SOY ADMIN DE SUCURSAL
+                return query.Where(d => d.IdEmpresa == idEmpresa).ToList(); // retorno la tabla Rol y su tabla de detalleRol por medio del FK (include)
+            }
         }
 
         public async Task<FabricaUsuario> ObtenerCredenciales(string correo, string clave)
@@ -58,7 +64,7 @@ namespace GeoPedidos.BLL.Implementacion
                 if (usuarioEncontrado == null)
                     throw new TaskCanceledException("El usuario no existe");
 
-                usuarioEncontrado.Email = entidad.Email;
+                usuarioEncontrado.Nombre = entidad.Nombre;
                 usuarioEncontrado.Apellido = entidad.Apellido;
 
                 bool respuesta = await _repository.Editar(usuarioEncontrado);

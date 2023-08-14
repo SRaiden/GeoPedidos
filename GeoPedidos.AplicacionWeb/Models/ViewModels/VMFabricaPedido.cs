@@ -26,6 +26,8 @@
 
         public string? FechaDesde { get; set; }
 
+        public string? Comentario { get; set; }
+
         public string? FechaHasta { get; set; }
 
         public string? Created { get; set; }

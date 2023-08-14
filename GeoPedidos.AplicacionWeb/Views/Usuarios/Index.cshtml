@@ -46,6 +46,8 @@
 <div class="modal fade" id="modalData" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
+            <input id="usLog" value="@ViewBag.idUserLogin" hidden />
+            <input id="empLog" value="@ViewBag.idEmpresaLogin" hidden />
             <div class="modal-header">
                 <h4 class="mb-0" id="titulo"></h4>
             </div>
@@ -83,16 +85,26 @@
                                     <input type="email" class="form-control" id="txtEmail" />
                                 </div>
                             </div>
+
                             <div class="mb-3">
-                                <label for="largeSelect" class="form-label">Empresa</label>
-                                <select id="cboEmpresas" class="form-select form-select-lg">
-                                </select>
+                                @if (ViewBag.idUserLogin == "1") // Soy SUPER ADMIN
+                                {
+                                    <label for="largeSelect" class="form-label">Empresa</label>
+                                    <select id="cboEmpresas" class="form-select form-select-lg">
+                                    </select>
+                                }
+                                else // SOY ADMIN DE SUCURSALES
+                                {
+                                    <label for="largeSelect" class="form-label">Empresa</label>
+                                    <input id="cboEmpresas" class="form-control form-select-lg" type="text" readonly />
+                                }
                             </div>
                             <div class="mb-3">
                                 <label for="largeSelect" class="form-label">Sucursal</label>
                                 <select id="cboSucursales" class="form-select form-select-lg">
                                 </select>
                             </div>
+
                             <div class="mb-3">
                                 <label for="largeSelect" class="form-label">Estado</label>
                                 <select id="cboEstado" class="form-select form-select-lg">

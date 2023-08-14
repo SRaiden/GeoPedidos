@@ -19,6 +19,8 @@ var rolLogin = $("#rolLogin").val();
 
 
 $(document).ready(function () {
+    $("#rbTodos").prop("checked", true);
+
     // Obtener la fecha de hoy
     const hoy = new Date();
 
@@ -49,9 +51,8 @@ $(document).ready(function () {
                     })
                 }
             })
-        if (empLogin == null) empLogin = "7"; // si soy superadmin, por orden alfabetico la empresa con id -> 7 es la primera para que carge bien
+        if (empLogin == null) empLogin = "7"; 
     }
-
     if(empLogin != null && sucLogin == null)
     { // SOY ADMIN DE SUCURSALES
         
@@ -61,27 +62,88 @@ $(document).ready(function () {
         .then(response => {
             return response.ok ? response.json() : Promise.reject(response);
         })
-        .then(responseJson => { // creamos un response a la bbdd
+        .then(responseJson => { 
             $('#cboSucursales').empty();
             $("#cboSucursales").append(
                 $("<option>").val(0).text("- TODAS LAS SUCURSALES -") // OPTION DE ADMINISTRADOR
             )
-            if (responseJson.length > 0) { // encontro datos en la bbdd?
+            if (responseJson.length > 0) { 
                 responseJson.sort((a, b) => a.nombreSucursal.localeCompare(b.nombreSucursal));
                 responseJson.forEach((item) => {
-                    $("#cboSucursales").append( // hacemos llamado a la etiqueta cbroRol
+                    $("#cboSucursales").append( 
                         $("<option>").val(item.id).text(item.nombreSucursal)
                     )
                 })
             }
         })
     }
-});
 
-//MODIFICAR SUCURSAL SEGUN EMPRESA ELEGIDA
-$("#cboEmpresas").on("change", function () {
-    var optionEmpresa = $(this).find(":selected").val()
-    cargarSucursales(optionEmpresa)
+    // OBTUVO DATOS?? APUNTO CUALES FILTRO
+    var Filtrada = $("#Filtrada").prop("checked");
+    if (Filtrada) {
+        var empFiltrada = $("#empFiltrada").val();
+        var sucFiltrada = $("#sucFiltrada").val();
+        var radioFiltrada = $("#radioFiltrada").val();
+        var fechaDesdeFiltrada = $("#fechaDesdeFiltrada").val();
+        var fechaHastaFiltrada = $("#fechaHastaFiltrada").val();
+
+        // soy super admin?? 
+        if (empLogin == "7" && sucLogin == null) {
+            $("#cboEmpresas").val(empFiltrada);
+            var optionEmpresa = $(this).find(":selected").val()
+            cargarSucursales(optionEmpresa)
+            $("#cboSucursales").val(sucFiltrada);
+        } else if (empLogin != null && sucLogin == null) {  // soy admin emp
+            var SelectSuc = document.getElementById("cboSucursales");
+            for (var z = 0; z < SelectSuc.children.length; z++) {
+                var value = SelectSuc.options[z].value;
+                if (sucFiltrada == value) {
+                    SelectSuc.options[z].setAttribute("selected", "selected");
+                }
+            }
+        }
+
+        // radio
+        $(radioFiltrada).prop("checked", true);
+
+        // rango fechas
+        $("#txtDesde").val(fechaDesdeFiltrada);
+        $("#txtHasta").val(fechaHastaFiltrada);
+
+        // ocultar botones tabla segun estado
+        $("#tbdata tbody tr").each(function () {
+            var estado = $(this).find(".pendiente").text();
+            var btnEditar = $(this).find(".btn-editar");
+
+            if (estado == "Anulado") {
+                $(this).find('.btn-eliminar').hide();
+                $(this).find('.btn-editar').hide();
+                $(this).find('.btn-reporte').hide();
+            }
+
+            if (estado != "Anulado" && estado != "Pendiente") {
+                $(this).find('.btn-editar').hide();
+                $(this).find('.btn-eliminar').hide();
+            }
+
+            // Soy Admin de suc o superAdmin??
+            if (rolLogin == "0") {
+                if (userLogin != "1") { // Soy admin de suc??
+                    if (estado == "Pendiente") {
+                        $(this).find('.btn-editar').hide();
+                        $(this).find('.btn-eliminar').show();
+                    }
+                } else { // soy superAdmin
+                    $(this).find('.btn-editar').hide();
+                    $(this).find('.btn-eliminar').hide();
+                }
+            } else { // soy User
+                $(this).find('.btn-editar').show();
+                $(this).find('.btn-eliminar').show();
+            }
+
+        });
+    }
 });
 
 function cargarSucursales(idEmpresa) {
@@ -107,25 +169,29 @@ function cargarSucursales(idEmpresa) {
         });
 };
 
-$("#cboEmpresas").on("change", function () {
-    busqueda();
-});
 
-$("#cboSucursales").on("change", function () {
-    busqueda();
-});
+//--// CANCELADO LA OPERACION DE BUSQUEDA PORQUE EL SERVIDOR CANCELA EL DATABLE
 
-$('input[type=radio][name=rbReporte]').change(function () {
-    busqueda();
-});
+//$("#cboEmpresas").on("change", function () {
+//    busqueda();
+//});
 
-$("#txtDesde").blur(function () {
-    busqueda();
-});
+//$("#cboSucursales").on("change", function () {
+//    busqueda();
+//});
 
-$("#txtHasta").blur(function () {
-    busqueda();
-});
+//$('input[type=radio][name=rbReporte]').change(function () {
+//    busqueda();
+//});
+
+//$("#txtDesde").blur(function () {
+//    busqueda();
+//});
+
+//$("#txtHasta").blur(function () {
+//    busqueda();
+//});
+
 
 //--//
 
@@ -154,12 +220,11 @@ function busqueda() {
     tablaData = $('#tbdata').DataTable({
         responsive: true,
         "ajax": {
-            "url": `/Pedidos/Busqueda?idUsuario=${modelo.idUsuario}&idSucursal=${modelo.idSucursal}&idEmpresa=${modelo.idEmpresa}&tipo="${modelo.tipo}"&fechaDesde="${modelo.FechaDesde}"&fechaHasta="${modelo.FechaHasta}"`,
-            "type": "GET",
+            "url": `/Pedidos/Busqueda?data=${encodeURIComponent(JSON.stringify(modelo))}`,
+            "type": "POST",
             "datatype": "json"
         },
         "bDestroy": true,
-        "datasrc": "",
         "columns": [
             { "data": "id" },
             { "data": "created" },
@@ -225,7 +290,7 @@ function busqueda() {
                 var estado = ($(row.node()).find('[class="pendiente"]').text());
 
                 // los pedidos en estado pendiente se pueden editar o eliminar, los otros no
-                // Soy User?
+
                 if (estado == "Anulado") {
                     $(row.node()).find('.btn-eliminar').hide();
                     $(row.node()).find('.btn-editar').hide();
@@ -237,12 +302,18 @@ function busqueda() {
                     $(row.node()).find('.btn-eliminar').hide();
                 }
 
+                // Soy Admin de suc o superAdmin??
                 if (rolLogin == "0") {
-                    if (estado == "Pendiente") {
+                    if (userLogin != "1") { // Soy admin de suc??
+                        if (estado == "Pendiente") {
+                            $(row.node()).find('.btn-editar').hide();
+                            $(row.node()).find('.btn-eliminar').show();
+                        }
+                    } else { // soy superAdmin
                         $(row.node()).find('.btn-editar').hide();
-                        $(row.node()).find('.btn-eliminar').show();
+                        $(row.node()).find('.btn-eliminar').hide();
                     }
-                } else {
+                } else { // soy User
                     $(row.node()).find('.btn-editar').show();
                     $(row.node()).find('.btn-eliminar').show();
                 } 
@@ -309,6 +380,7 @@ $("#btnPasteleria").click(function () {
     idPedidoEditar = "";
 });
 
+
 $("#CerrarModal").click(function () {
     $("#modalData").modal("hide");
 });
@@ -357,19 +429,9 @@ $("#tbdata tbody").on("click", ".btn-reporte", function () {
     }
     const data = tablaData.row(filaSeleccionada).data();
 
-    fetch(`/Pedidos/MostrarPDFPedido?idPedido=${data.id}`, {
-        method: "POST"
-    })
-    .then(response => response.blob())
-    .then(blob => {
-        const url = URL.createObjectURL(blob);
-        window.open(url, "_blank");
-    })
-
-    //$("#Reporte").attr("href", `/Pedidos/MostrarPDFPedido?idPedido=${data.id}`)
+    $("#Reporte").attr("href", `/Pedidos/MostrarPDFPedido?idPedido=${data.id}`)
     //$("#Reporte").attr("target", "_blank");
 });
-
 
 // ELIMINAR
 $("#tbdata tbody").on("click", ".btn-eliminar", function () {

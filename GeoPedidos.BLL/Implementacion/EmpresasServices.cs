@@ -112,10 +112,16 @@ namespace GeoPedidos.BLL.Implementacion
             return query.Where(i => i.Id == id).First().NombreEmpresa.ToString();
         }
 
-        public async Task<GeneralSucursales> ObtenerDatoEmpresa(int idSucursal)
+        public async Task<GeneralSucursales> ObtenerDatoSucursal(int idSucursal)
         {
             IQueryable<GeneralSucursales> query = await _sucursalRepository.Consultar();
             return query.Where(i => i.Id == idSucursal).First();
+        }
+
+        public async Task<GeneralEmpresa> ObtenerDatoEmpresa(int idEmpresa)
+        {
+            IQueryable<GeneralEmpresa> query = await _repository.Consultar();
+            return query.Where(i => i.Id == idEmpresa).First();
         }
     }
 }

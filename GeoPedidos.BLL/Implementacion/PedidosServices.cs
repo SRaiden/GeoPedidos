@@ -65,8 +65,6 @@ namespace GeoPedidos.BLL.Implementacion
             return query.Where(e => e.IdEmpresa == idEmpresa).ToList();
         }
 
-        //------------------------------------------------------------------------------------------//
-
         public async Task<List<FabricaPedido>> ObtenerPedidos(int user, int idSucursalElegida, int idEmpresaElegida, string tipo, string fechaDesde, string fechaHasta)
         {
             IQueryable<FabricaUsuario> queryFabrica = await _usuarioRepository.Consultar();
@@ -98,7 +96,8 @@ namespace GeoPedidos.BLL.Implementacion
                         {
                             AllSucursal = querySucursal.Where(d => d.EmpresaId == idEmpresaElegida).ToList(); //SI SOY SUPERADMIN
                         }
-                        else {
+                        else
+                        {
                             AllSucursal = querySucursal.Where(d => d.EmpresaId == datoUsuario.IdEmpresa).ToList(); // SI SOY ADMIN DE SUCURSALES
                         }
 
@@ -107,7 +106,7 @@ namespace GeoPedidos.BLL.Implementacion
                         foreach (var ite in AllSucursal)
                         {
                             fabricaPedidoTemp = query.Where(v => v.IdSucursal == ite.Id).ToList();
-                            foreach(var ite2 in fabricaPedidoTemp)
+                            foreach (var ite2 in fabricaPedidoTemp)
                             {
                                 listaTotal.Add(ite2);
                             }
@@ -132,8 +131,8 @@ namespace GeoPedidos.BLL.Implementacion
                     {
                         // LOGICA PARA OBTENER TODAS LAS SUCURSALES DE UNA EMPRESA
                         IQueryable<GeneralSucursales> querySucursal = await _sucursalRepository.Consultar();
-
                         List<GeneralSucursales> AllSucursal = null;
+
                         if (datoUsuario.IdEmpresa == 0)
                         {
                             AllSucursal = querySucursal.Where(d => d.EmpresaId == idEmpresaElegida).ToList(); //SI SOY SUPERADMIN
@@ -153,7 +152,6 @@ namespace GeoPedidos.BLL.Implementacion
                                 listaTotal.Add(ite2);
                             }
                         }
-
                     }
                     else // Filtro cualquier sucursal
                     {
@@ -172,7 +170,7 @@ namespace GeoPedidos.BLL.Implementacion
             for (int i = 0; i < listaTotal.Count; i++)
             {
                 DateTime creado = DateTime.Parse(DateTime.Parse(listaTotal[i].Created.ToString()).ToString("dd/MM/yyyy"));
-                if (creado >= FD && creado <= FH)  
+                if (creado >= FD && creado <= FH)
                 {
                     fabricaPedidoResultado.Add(listaTotal[i]);
                 }
@@ -181,6 +179,7 @@ namespace GeoPedidos.BLL.Implementacion
             return fabricaPedidoResultado;
         }
 
+        //------------------------------------------------------------------------------------------//
         public async Task<FabricaPedido> Crear(FabricaPedido entidad, List<FabricaPedidosDetalle> entidad_dos)
         {
             try
@@ -254,46 +253,6 @@ namespace GeoPedidos.BLL.Implementacion
             {
                 throw;
             }
-        }
-
-        public async Task<List<FabricaPedidosDetalle>> ObtenerPedidos(int idPedido)
-        {
-            // Buscar el ID del pedido
-            IQueryable<FabricaPedidosDetalle> query = await _pedidosDetalleRepository.Consultar();
-            IQueryable<FabricaPedido> queryCabecera = await _pedidosRepository.Consultar();
-                FabricaPedido datoPedido = queryCabecera.Where(p => p.Id == idPedido).First();
-            // DEJO PREGRABADO LAS CONSULTAS
-            IQueryable<FabricaGusto> queryGusto = await _gustosRepository.Consultar();
-            IQueryable<FabricaInsumo> queryInsumo = await _insumosRepository.Consultar();
-            IQueryable<FabricaProducto> queryProducto = await _productosRepository.Consultar();
-            IQueryable<FabricaPasteleria> queryPasteleria = await _pasteleriaRepository.Consultar();
-
-            List<FabricaPedidosDetalle> analizar = query.Where(d => d.IdPedido == idPedido).ToList();
-            foreach (var ite in analizar) {
-                // ACTUALIZAR SEGUN EL CODIGO
-                if (datoPedido.Tipo == "helado")
-                {
-                    FabricaGusto gusto = queryGusto.Where(g => g.Id == ite.Codigo).First();
-                    ite.Codigo = gusto.Codigo; 
-                }
-                else if (datoPedido.Tipo == "insumo")
-                {
-                    FabricaInsumo insumo = queryInsumo.Where(g => g.Id == ite.Codigo).First();
-                    ite.Codigo = insumo.Codigo;
-                }
-                else if (datoPedido.Tipo == "producto")
-                {
-                    FabricaProducto producto = queryProducto.Where(g => g.Id == ite.Codigo).First();
-                    ite.Codigo = producto.Codigo;
-                }
-                else
-                {
-                    FabricaPasteleria pasteleria = queryPasteleria.Where(g => g.Id == ite.Codigo).First();
-                    ite.Codigo = pasteleria.Codigo;
-                }
-            }
-
-            return analizar;
         }
 
         public async Task<FabricaPedido> Editar(FabricaPedido entidad, List<FabricaPedidosDetalle> entidad_dos, int idPedido)
@@ -377,41 +336,54 @@ namespace GeoPedidos.BLL.Implementacion
             }
         }
 
-        public async Task<bool> Eliminar(int idPedido)
-        {
-            try
-            {
-                // BORRAMOS LOS DETALLES DEL PEDIDO
-                IQueryable<FabricaPedidosDetalle> query = await _pedidosDetalleRepository.Consultar();
-                List<FabricaPedidosDetalle> pedidoDetalleEncontrado = query.Where(s => s.IdPedido == idPedido).ToList();
-                for (int i = 0; i < pedidoDetalleEncontrado.Count; i++)
-                {
-                    bool respuestaDetalle = await _pedidosDetalleRepository.Eliminar(pedidoDetalleEncontrado[i]);
-                    if (!respuestaDetalle)
-                        throw new TaskCanceledException("No se pudo borrar el detalle del pedido");
-                }
-
-                // BORRAMOS CABECERA
-                FabricaPedido PedidoEncontrado = await _pedidosRepository.Obtener(c => c.Id == idPedido);
-                if (PedidoEncontrado == null)
-                    throw new TaskCanceledException("El pedido no existe");
-
-                bool respuesta = await _pedidosRepository.Eliminar(PedidoEncontrado);
-                return respuesta;
-            }
-            catch
-            {
-                throw;
-            }
-        }
-
         public async Task<List<FabricaPedidosDetalle>> VerDetallePedido(int idPedido)
         {
             IQueryable<FabricaPedidosDetalle> query = await _pedidosDetalleRepository.Consultar();
             return query.Where(s => s.IdPedido == idPedido).ToList();
         }
 
-        public async Task<string> ObtenerDatoProducto(int codigoProducto, string tipoProducto, int idEmpresa)
+        public async Task<List<FabricaPedidosDetalle>> ObtenerCodigoRealProducto(int idPedido)
+        {
+            // Buscar el ID del pedido
+            IQueryable<FabricaPedidosDetalle> query = await _pedidosDetalleRepository.Consultar();
+            IQueryable<FabricaPedido> queryCabecera = await _pedidosRepository.Consultar();
+            FabricaPedido datoPedido = queryCabecera.Where(p => p.Id == idPedido).First();
+            // DEJO PREGRABADO LAS CONSULTAS
+            IQueryable<FabricaGusto> queryGusto = await _gustosRepository.Consultar();
+            IQueryable<FabricaInsumo> queryInsumo = await _insumosRepository.Consultar();
+            IQueryable<FabricaProducto> queryProducto = await _productosRepository.Consultar();
+            IQueryable<FabricaPasteleria> queryPasteleria = await _pasteleriaRepository.Consultar();
+
+            List<FabricaPedidosDetalle> analizar = query.Where(d => d.IdPedido == idPedido).ToList();
+            foreach (var ite in analizar)
+            {
+                // ACTUALIZAR SEGUN EL CODIGO
+                if (datoPedido.Tipo == "helado")
+                {
+                    FabricaGusto gusto = queryGusto.Where(g => g.Id == ite.Codigo).First();
+                    ite.Codigo = gusto.Codigo;
+                }
+                else if (datoPedido.Tipo == "insumo")
+                {
+                    FabricaInsumo insumo = queryInsumo.Where(g => g.Id == ite.Codigo).First();
+                    ite.Codigo = insumo.Codigo;
+                }
+                else if (datoPedido.Tipo == "producto")
+                {
+                    FabricaProducto producto = queryProducto.Where(g => g.Id == ite.Codigo).First();
+                    ite.Codigo = producto.Codigo;
+                }
+                else
+                {
+                    FabricaPasteleria pasteleria = queryPasteleria.Where(g => g.Id == ite.Codigo).First();
+                    ite.Codigo = pasteleria.Codigo;
+                }
+            }
+
+            return analizar;
+        }
+
+        public async Task<string> ObtenerNombreCategoriaProducto(int codigoProducto, string tipoProducto, int idEmpresa)
         {
             string concat;
             if (tipoProducto == "helado")
@@ -455,6 +427,34 @@ namespace GeoPedidos.BLL.Implementacion
         {
             IQueryable<FabricaPedido> query = await _pedidosRepository.Consultar();
             return query.Where(s => s.Id == idPedido).First();
+        }
+
+        public async Task<bool> Eliminar(int idPedido)
+        {
+            try
+            {
+                // BORRAMOS LOS DETALLES DEL PEDIDO
+                IQueryable<FabricaPedidosDetalle> query = await _pedidosDetalleRepository.Consultar();
+                List<FabricaPedidosDetalle> pedidoDetalleEncontrado = query.Where(s => s.IdPedido == idPedido).ToList();
+                for (int i = 0; i < pedidoDetalleEncontrado.Count; i++)
+                {
+                    bool respuestaDetalle = await _pedidosDetalleRepository.Eliminar(pedidoDetalleEncontrado[i]);
+                    if (!respuestaDetalle)
+                        throw new TaskCanceledException("No se pudo borrar el detalle del pedido");
+                }
+
+                // BORRAMOS CABECERA
+                FabricaPedido PedidoEncontrado = await _pedidosRepository.Obtener(c => c.Id == idPedido);
+                if (PedidoEncontrado == null)
+                    throw new TaskCanceledException("El pedido no existe");
+
+                bool respuesta = await _pedidosRepository.Eliminar(PedidoEncontrado);
+                return respuesta;
+            }
+            catch
+            {
+                throw;
+            }
         }
     }
 }

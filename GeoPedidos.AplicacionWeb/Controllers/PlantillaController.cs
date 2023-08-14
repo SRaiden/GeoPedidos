@@ -8,6 +8,7 @@ using GeoPedidos.BLL.Implementacion;
 
 namespace GeoPedidos.AplicacionWeb.Controllers
 {
+    [Authorize]
     public class PlantillaController : Controller
     {
         private readonly IMapper _mapper;
@@ -35,7 +36,7 @@ namespace GeoPedidos.AplicacionWeb.Controllers
             for (int a = 0; a < vmLista.Count; a++)
             {
                 VMPedido vm = new VMPedido();
-                string resultado = await _pedidosServices.ObtenerDatoProducto(Int32.Parse(vmLista[a].Codigo.ToString()), pedidoCabecera.Tipo, Int32.Parse(datoSucursal.EmpresaId.ToString()));
+                string resultado = await _pedidosServices.ObtenerNombreCategoriaProducto(Int32.Parse(vmLista[a].Codigo.ToString()), pedidoCabecera.Tipo, Int32.Parse(datoSucursal.EmpresaId.ToString()));
                 string[] separar = resultado.Split('@');
 
                 vm.CodigoDetalle = vmLista[a].Codigo;

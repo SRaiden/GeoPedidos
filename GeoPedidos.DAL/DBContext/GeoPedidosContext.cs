@@ -150,6 +150,9 @@ public partial class GeoPedidosContext : DbContext
             entity.Property(e => e.Nota)
                 .HasMaxLength(500)
                 .IsUnicode(false);
+            entity.Property(e => e.Comentario)
+               .HasMaxLength(500)
+               .IsUnicode(false);
             entity.Property(e => e.NumeroPedido).HasColumnName("Numero_Pedido");
             entity.Property(e => e.Tipo)
                 .HasMaxLength(10)

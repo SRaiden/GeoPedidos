@@ -25,7 +25,7 @@ namespace GeoPedidos.AplicacionWeb.Controllers
             ClaimsPrincipal claimUser = HttpContext.User;
             if (claimUser.Identity.IsAuthenticated) // BOTON DE MANTENER SESION ABIERTA
             {
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "Pedidos");
             }
 
             return View();

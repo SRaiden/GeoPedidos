@@ -10,7 +10,7 @@ namespace GeoPedidos.BLL.Interfaces
 {
     public interface IFabricaUsuariosServices
     {
-        Task<List<FabricaUsuario>> Lista();
+        Task<List<FabricaUsuario>> Lista(int idempresa = 0);
         Task<int> UltimoId();
         Task<FabricaUsuario> ObtenerCredenciales(string correo, string clave); // consultar para su login
         Task<FabricaUsuario> ObtenerId(int IdUsuario);

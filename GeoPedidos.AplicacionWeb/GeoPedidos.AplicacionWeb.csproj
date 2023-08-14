@@ -4,6 +4,7 @@
     <TargetFramework>net6.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <OutputType>Exe</OutputType>
   </PropertyGroup>
 
   <ItemGroup>
@@ -20,13 +21,22 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="Utilidades\LibreriaPDF\libwkhtmltox.dll">
+    <None Update="Utilidades\LibreriaPDF\32bits\libwkhtmltox.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Utilidades\LibreriaPDF\libwkhtmltox.dylib">
+    <None Update="Utilidades\LibreriaPDF\32bits\libwkhtmltox.dylib">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Utilidades\LibreriaPDF\libwkhtmltox.so">
+    <None Update="Utilidades\LibreriaPDF\32bits\libwkhtmltox.so">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Utilidades\LibreriaPDF\64bits\libwkhtmltox.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Utilidades\LibreriaPDF\64bits\libwkhtmltox.dylib">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Utilidades\LibreriaPDF\64bits\libwkhtmltox.so">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>

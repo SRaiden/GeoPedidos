@@ -4,45 +4,71 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+@section Estilos{
+    <!-- ============================================================
+    =ESTILOS PARA ESTA PAGINA
+    ===============================================================-->
+    <link rel="stylesheet" href="~/vendor/datatables/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="~/vendor/datatables/extensiones/css/responsive.dataTables.min.css">
+    <link rel="stylesheet" href="~/vendor/datatables/extensiones/css/buttons.dataTables.min.css">
+}
+
+
 <div class="card mb-4">
     <h5 class="card-header">Perfil</h5>
     <!-- Account -->
     <div class="card-body">
-        <form id="formAccountSettings" method="POST" onsubmit="return false">
-            <div class="row">
-                <div class="mb-3 col-md-6">
-                    <label for="firstName" class="form-label">Nombre</label>
-                    <input class="form-control" type="text" id="Nombre" name="Nombre" value="Mi Nombre" readonly/>
-                </div>
-                <div class="mb-3 col-md-6">
-                    <label for="lastName" class="form-label">Apellido</label>
-                    <input class="form-control" type="text" name="Apellido" id="Apellido" value="Mi Apellido" readonly />
-                </div>
-                <div class="mb-3 col-md-6">
-                    <label for="email" class="form-label">E-mail</label>
-                    <input class="form-control" type="text" id="Email" name="Email" value="john.doe@example.com" readonly />
-                </div>
-                <div class="mb-3 col-md-6">
-                    <label for="email" class="form-label">Rol</label>
-                    <input class="form-control" type="text" id="Rol" name="Rol" value="User" readonly />
-                </div>
-                <div class="mb-3 col-md-4">
-                    <label for="email" class="form-label">Contraseña Actual</label>
-                    <input class="form-control" type="password" id="passwordActual" name="passwordActual" value="123" />
-                </div>
-                <div class="mb-3 col-md-4">
-                    <label for="email" class="form-label">Contraseña Nueva</label>
-                    <input class="form-control" type="password" id="passwordNueva" name="passwordNueva" value="" />
-                </div>
-                <div class="mb-3 col-md-4">
-                    <label for="email" class="form-label">Repetir Contraseña Nueva</label>
-                    <input class="form-control" type="password" id="passwordRepetir" name="passwordRepetir" value="" />
-                </div>
+        <div class="row">
+            <div class="mb-3 col-md-6">
+                <label for="firstName" class="form-label">Nombre</label>
+                <input class="form-control" type="text" id="txtNombre" name="txtNombre" />
             </div>
-            <div class="mt-2">
-                <button type="submit" class="btn btn-primary me-2">Guardar Cambios</button>
+            <div class="mb-3 col-md-6">
+                <label for="lastName" class="form-label">Apellido</label>
+                <input class="form-control" type="text" name="txtApellido" id="txtApellido" />
             </div>
-        </form>
+            <div class="mb-3 col-md-6">
+                <label for="email" class="form-label">E-mail</label>
+                <input class="form-control" type="text" id="txtEmail" name="txtEmail" readonly />
+            </div>
+            <div class="mb-3 col-md-6">
+                <label for="email" class="form-label">Rol</label>
+                <input class="form-control" type="text" id="txtRol" name="txtRol" readonly />
+            </div>
+            <div class="mb-3 col-md-4">
+                <label for="email" class="form-label">Contraseña Actual</label>
+                <input class="form-control input-validar" type="password" id="passwordActual" name="passwordActual"/>
+            </div>
+            <div class="mb-3 col-md-4">
+                <label for="email" class="form-label">Contraseña Nueva</label>
+                <input class="form-control input-validar" type="password" id="passwordNueva" name="NuevaPassword"/>
+            </div>
+            <div class="mb-3 col-md-4">
+                <label for="email" class="form-label">Repetir Contraseña Nueva</label>
+                <input class="form-control input-validar" type="password" id="passwordRepetir" name="RepetirPassword" />
+            </div>
+        </div>
+        <div class="mt-2">
+            <button type="button" class="btn btn-primary me-2" id="guardar">Guardar Cambios</button>
+        </div>
+
     </div>
     <!-- /Account -->
 </div>
+
+@section Scripts{
+    <!-- ============================================================
+    =SCRIPTS PARA ESTA PAGINA
+    ===============================================================-->
+    <script src="~/vendor/datatables/jquery.dataTables.min.js"></script>
+    <script src="~/vendor/datatables/dataTables.bootstrap4.min.js"></script>
+
+    <script src="~/vendor/datatables/extensiones/js/dataTables.responsive.min.js"></script>
+
+    <script src="~/vendor/datatables/extensiones/js/dataTables.buttons.min.js"></script>
+    <script src="~/vendor/datatables/extensiones/js/jszip.min.js"></script>
+    <script src="~/vendor/datatables/extensiones/js/buttons.html5.min.js"></script>
+    <script src="~/vendor/datatables/extensiones/js/buttons.print.min.js"></script>
+
+    <script src="~/js/vistas/Home_Index.js"></script>
+}

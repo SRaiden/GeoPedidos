@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "OkfLW6Vz9fDejJnhoWbIynxN/Y2ucqCs4JNenklIj0Q=",
+  "Hash": "L3iW7xkqxjYsdroAwlfWwGR9ZnLBCHQVt9RZYeRowTU=",
   "Source": "GeoPedidos.AplicacionWeb",
   "BasePath": "_content/GeoPedidos.AplicacionWeb",
   "Mode": "Default",
@@ -1377,6 +1377,40 @@
       "OriginalItemSpec": "wwwroot\\images\\Logo.svg"
     },
     {
+      "Identity": "C:\\Users\\Nata\\OneDrive\\Documentos\\GitHub\\GeoPedidos\\GeoPedidos.AplicacionWeb\\wwwroot\\images\\logoMundo.ico",
+      "SourceId": "GeoPedidos.AplicacionWeb",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\Nata\\OneDrive\\Documentos\\GitHub\\GeoPedidos\\GeoPedidos.AplicacionWeb\\wwwroot\\",
+      "BasePath": "_content/GeoPedidos.AplicacionWeb",
+      "RelativePath": "images/logoMundo.ico",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\images\\logoMundo.ico"
+    },
+    {
+      "Identity": "C:\\Users\\Nata\\OneDrive\\Documentos\\GitHub\\GeoPedidos\\GeoPedidos.AplicacionWeb\\wwwroot\\images\\logoPerfil.png",
+      "SourceId": "GeoPedidos.AplicacionWeb",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\Nata\\OneDrive\\Documentos\\GitHub\\GeoPedidos\\GeoPedidos.AplicacionWeb\\wwwroot\\",
+      "BasePath": "_content/GeoPedidos.AplicacionWeb",
+      "RelativePath": "images/logoPerfil.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\images\\logoPerfil.png"
+    },
+    {
       "Identity": "C:\\Users\\Nata\\OneDrive\\Documentos\\GitHub\\GeoPedidos\\GeoPedidos.AplicacionWeb\\wwwroot\\js\\sb-admin-2.js",
       "SourceId": "GeoPedidos.AplicacionWeb",
       "SourceType": "Discovered",
@@ -1596,6 +1630,23 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\js\\vistas\\Empresas_Index.js"
+    },
+    {
+      "Identity": "C:\\Users\\Nata\\OneDrive\\Documentos\\GitHub\\GeoPedidos\\GeoPedidos.AplicacionWeb\\wwwroot\\js\\vistas\\Home_Index.js",
+      "SourceId": "GeoPedidos.AplicacionWeb",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\Nata\\OneDrive\\Documentos\\GitHub\\GeoPedidos\\GeoPedidos.AplicacionWeb\\wwwroot\\",
+      "BasePath": "_content/GeoPedidos.AplicacionWeb",
+      "RelativePath": "js/vistas/Home_Index.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\js\\vistas\\Home_Index.js"
     },
     {
       "Identity": "C:\\Users\\Nata\\OneDrive\\Documentos\\GitHub\\GeoPedidos\\GeoPedidos.AplicacionWeb\\wwwroot\\js\\vistas\\Pedidos_Index.js",

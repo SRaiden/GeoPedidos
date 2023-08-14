@@ -1,6 +1,9 @@
-C:\Users\Nata\OneDrive\Documentos\GitHub\GeoPedidos\GeoPedidos.AplicacionWeb\obj\Release\net6.0\PubTmp\Out\Utilidades\LibreriaPDF\libwkhtmltox.dll
-C:\Users\Nata\OneDrive\Documentos\GitHub\GeoPedidos\GeoPedidos.AplicacionWeb\obj\Release\net6.0\PubTmp\Out\Utilidades\LibreriaPDF\libwkhtmltox.dylib
-C:\Users\Nata\OneDrive\Documentos\GitHub\GeoPedidos\GeoPedidos.AplicacionWeb\obj\Release\net6.0\PubTmp\Out\Utilidades\LibreriaPDF\libwkhtmltox.so
+C:\Users\Nata\OneDrive\Documentos\GitHub\GeoPedidos\GeoPedidos.AplicacionWeb\obj\Release\net6.0\PubTmp\Out\Utilidades\LibreriaPDF\32bits\libwkhtmltox.dll
+C:\Users\Nata\OneDrive\Documentos\GitHub\GeoPedidos\GeoPedidos.AplicacionWeb\obj\Release\net6.0\PubTmp\Out\Utilidades\LibreriaPDF\32bits\libwkhtmltox.dylib
+C:\Users\Nata\OneDrive\Documentos\GitHub\GeoPedidos\GeoPedidos.AplicacionWeb\obj\Release\net6.0\PubTmp\Out\Utilidades\LibreriaPDF\32bits\libwkhtmltox.so
+C:\Users\Nata\OneDrive\Documentos\GitHub\GeoPedidos\GeoPedidos.AplicacionWeb\obj\Release\net6.0\PubTmp\Out\Utilidades\LibreriaPDF\64bits\libwkhtmltox.dll
+C:\Users\Nata\OneDrive\Documentos\GitHub\GeoPedidos\GeoPedidos.AplicacionWeb\obj\Release\net6.0\PubTmp\Out\Utilidades\LibreriaPDF\64bits\libwkhtmltox.dylib
+C:\Users\Nata\OneDrive\Documentos\GitHub\GeoPedidos\GeoPedidos.AplicacionWeb\obj\Release\net6.0\PubTmp\Out\Utilidades\LibreriaPDF\64bits\libwkhtmltox.so
 C:\Users\Nata\OneDrive\Documentos\GitHub\GeoPedidos\GeoPedidos.AplicacionWeb\obj\Release\net6.0\PubTmp\Out\GeoPedidos.AplicacionWeb.exe
 C:\Users\Nata\OneDrive\Documentos\GitHub\GeoPedidos\GeoPedidos.AplicacionWeb\obj\Release\net6.0\PubTmp\Out\appsettings.Development.json
 C:\Users\Nata\OneDrive\Documentos\GitHub\GeoPedidos\GeoPedidos.AplicacionWeb\obj\Release\net6.0\PubTmp\Out\appsettings.json

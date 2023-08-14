@@ -36,4 +36,6 @@ public partial class FabricaPedido
     public string? Nota { get; set; }
 
     public bool? LeidoCaja { get; set; }
+
+    public string? Comentario { get; set; }
 }

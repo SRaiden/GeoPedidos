@@ -12,7 +12,8 @@ namespace GeoPedidos.BLL.Interfaces
     {
         Task<List<GeneralEmpresa>> Lista();
         Task<int> UltimoId();
-        Task<GeneralSucursales> ObtenerDatoEmpresa(int idSucursal);
+        Task<GeneralSucursales> ObtenerDatoSucursal(int idSucursal);
+        Task<GeneralEmpresa> ObtenerDatoEmpresa(int idEmpresa);
         Task<string> ObtenerNombreEmpresa(int id);
         Task<GeneralEmpresa> Crear(GeneralEmpresa entidad);
         Task<GeneralEmpresa> Editar(GeneralEmpresa entidad);

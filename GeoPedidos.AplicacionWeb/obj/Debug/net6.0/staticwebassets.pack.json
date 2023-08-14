@@ -317,6 +317,14 @@
       "PackagePath": "staticwebassets\\images\\login.jpg"
     },
     {
+      "Id": "C:\\Users\\Nata\\OneDrive\\Documentos\\GitHub\\GeoPedidos\\GeoPedidos.AplicacionWeb\\wwwroot\\images\\logoMundo.ico",
+      "PackagePath": "staticwebassets\\images\\logoMundo.ico"
+    },
+    {
+      "Id": "C:\\Users\\Nata\\OneDrive\\Documentos\\GitHub\\GeoPedidos\\GeoPedidos.AplicacionWeb\\wwwroot\\images\\logoPerfil.png",
+      "PackagePath": "staticwebassets\\images\\logoPerfil.png"
+    },
+    {
       "Id": "C:\\Users\\Nata\\OneDrive\\Documentos\\GitHub\\GeoPedidos\\GeoPedidos.AplicacionWeb\\wwwroot\\js\\sb-admin-2.js",
       "PackagePath": "staticwebassets\\js\\sb-admin-2.js"
     },
@@ -363,6 +371,10 @@
     {
       "Id": "C:\\Users\\Nata\\OneDrive\\Documentos\\GitHub\\GeoPedidos\\GeoPedidos.AplicacionWeb\\wwwroot\\js\\vistas\\Empresas_Index.js",
       "PackagePath": "staticwebassets\\js\\vistas\\Empresas_Index.js"
+    },
+    {
+      "Id": "C:\\Users\\Nata\\OneDrive\\Documentos\\GitHub\\GeoPedidos\\GeoPedidos.AplicacionWeb\\wwwroot\\js\\vistas\\Home_Index.js",
+      "PackagePath": "staticwebassets\\js\\vistas\\Home_Index.js"
     },
     {
       "Id": "C:\\Users\\Nata\\OneDrive\\Documentos\\GitHub\\GeoPedidos\\GeoPedidos.AplicacionWeb\\wwwroot\\js\\vistas\\Pedidos_Index.js",

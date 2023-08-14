@@ -24,6 +24,8 @@
 
         public string? Contraseña { get; set; }
 
+        public string? ContraseñaNueva { get; set; }
+
         public string? Created { get; set; }
 
         public string? Modified { get; set; }
