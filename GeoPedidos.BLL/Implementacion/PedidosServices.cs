@@ -41,29 +41,61 @@ namespace GeoPedidos.BLL.Implementacion
             _sucursalRepository = sucursalRepository;
         }
 
+        //-------------------------------- AGREGAR ------------------------------------------//
+
         public async Task<List<FabricaGusto>> ObtenerHelados(int idEmpresa)
         {
             IQueryable<FabricaGusto> query = await _gustosRepository.Consultar();
-            return query.Where(e => e.IdEmpresa == idEmpresa).ToList();
+            return query.Where(e => e.IdEmpresa == idEmpresa && e.Activo == true).ToList();
         }
 
         public async Task<List<FabricaInsumo>> ObtenerInsumos(int idEmpresa)
         {
             IQueryable<FabricaInsumo> query = await _insumosRepository.Consultar();
-            return query.Where(e => e.IdEmpresa == idEmpresa.ToString()).ToList();
+            return query.Where(e => e.IdEmpresa == idEmpresa.ToString() && e.Activo == true).ToList();
         }
 
         public async Task<List<FabricaPasteleria>> ObtenerPastelerias(int idEmpresa)
         {
             IQueryable<FabricaPasteleria> query = await _pasteleriaRepository.Consultar();
-            return query.Where(e => e.IdEmpresa == idEmpresa).ToList();
+            return query.Where(e => e.IdEmpresa == idEmpresa && e.Activo == true).ToList();
         }
 
         public async Task<List<FabricaProducto>> ObtenerProductos(int idEmpresa)
         {
             IQueryable<FabricaProducto> query = await _productosRepository.Consultar();
-            return query.Where(e => e.IdEmpresa == idEmpresa).ToList();
+            return query.Where(e => e.IdEmpresa == idEmpresa && e.Activo == true).ToList();
         }
+
+        //--------------------------------  / AGREGAR ------------------------------------------//
+        
+    
+        //-------------------------------- EDITAR ------------------------------------------//
+        public async Task<FabricaGusto> ObtenerUnHelado(int codigo)
+        {
+            IQueryable<FabricaGusto> query = await _gustosRepository.Consultar();
+            return query.Where(e => e.Id == codigo).First();
+        }
+
+        public async Task<FabricaInsumo> ObtenerUnInsumo(int codigo)
+        {
+            IQueryable<FabricaInsumo> query = await _insumosRepository.Consultar();
+            return query.Where(e => e.Id == codigo).First();
+        }
+
+        public async Task<FabricaProducto> ObtenerUnProducto(int codigo)
+        {
+            IQueryable<FabricaProducto> query = await _productosRepository.Consultar();
+            return query.Where(e => e.Id == codigo).First();
+        }
+
+        public async Task<FabricaPasteleria> ObtenerUnPasteleria(int codigo)
+        {
+            IQueryable<FabricaPasteleria> query = await _pasteleriaRepository.Consultar();
+            return query.Where(e => e.Id == codigo).First();
+        }
+
+        //-------------------------------- / EDITAR ------------------------------------------//
 
         public async Task<List<FabricaPedido>> ObtenerPedidos(int user, int idSucursalElegida, int idEmpresaElegida, string tipo, string fechaDesde, string fechaHasta)
         {
@@ -105,7 +137,7 @@ namespace GeoPedidos.BLL.Implementacion
                         List<FabricaPedido> fabricaPedidoTemp;
                         foreach (var ite in AllSucursal)
                         {
-                            fabricaPedidoTemp = query.Where(v => v.IdSucursal == ite.Id).ToList();
+                            fabricaPedidoTemp = query.Where(v => v.IdSucursal == ite.Id)/*.OrderByDescending(v => v.Created)*/.ToList();
                             foreach (var ite2 in fabricaPedidoTemp)
                             {
                                 listaTotal.Add(ite2);
@@ -115,12 +147,12 @@ namespace GeoPedidos.BLL.Implementacion
                     }
                     else // Filtro cualquier sucursal
                     {
-                        listaTotal = query.Where(v => v.IdSucursal == idSucursalElegida).ToList();
+                        listaTotal = query.Where(v => v.IdSucursal == idSucursalElegida)/*.OrderByDescending(v => v.Created)*/.ToList();
                     }
                 }
                 else // es user
                 {
-                    listaTotal = query.Where(v => v.IdSucursal == idSucursalElegida && v.IdUsuario == user).ToList();
+                    listaTotal = query.Where(v => v.IdSucursal == idSucursalElegida && v.IdUsuario == user)/*.OrderByDescending(v => v.Created)*/.ToList();
                 }
             }
             else
@@ -146,7 +178,7 @@ namespace GeoPedidos.BLL.Implementacion
                         List<FabricaPedido> fabricaPedidoTemp;
                         foreach (var ite in AllSucursal)
                         {
-                            fabricaPedidoTemp = query.Where(v => v.IdSucursal == ite.Id && v.Tipo == tipo).ToList();
+                            fabricaPedidoTemp = query.Where(v => v.IdSucursal == ite.Id && v.Tipo == tipo)/*.OrderByDescending(v => v.Created)*/.ToList();
                             foreach (var ite2 in fabricaPedidoTemp)
                             {
                                 listaTotal.Add(ite2);
@@ -155,12 +187,12 @@ namespace GeoPedidos.BLL.Implementacion
                     }
                     else // Filtro cualquier sucursal
                     {
-                        listaTotal = query.Where(v => v.IdSucursal == idSucursalElegida && v.Tipo == tipo).ToList();
+                        listaTotal = query.Where(v => v.IdSucursal == idSucursalElegida && v.Tipo == tipo)/*.OrderByDescending(v => v.Created)*/.ToList();
                     }
                 }
                 else // es user
                 {
-                    listaTotal = query.Where(v => v.IdSucursal == idSucursalElegida && v.IdUsuario == user && v.Tipo == tipo).ToList();
+                    listaTotal = query.Where(v => v.IdSucursal == idSucursalElegida && v.IdUsuario == user && v.Tipo == tipo)/*.OrderByDescending(v => v.Created)*/.ToList();
                 }
             }
 
@@ -265,6 +297,8 @@ namespace GeoPedidos.BLL.Implementacion
                 pedidoCabeceraEncontrado.Cantidad = entidad.Cantidad;
                 pedidoCabeceraEncontrado.Modified = entidad.Created;
                 pedidoCabeceraEncontrado.Estado = entidad.Estado;
+                pedidoCabeceraEncontrado.Comentario = entidad.Comentario;
+                pedidoCabeceraEncontrado.FechaEntrega = entidad.FechaEntrega;
                 bool respuesta = await _pedidosRepository.Editar(pedidoCabeceraEncontrado);
 
                 if (!respuesta)
@@ -392,7 +426,7 @@ namespace GeoPedidos.BLL.Implementacion
                 FabricaGusto fg = query.Where(e => e.Id == codigoProducto && e.IdEmpresa == idEmpresa).FirstOrDefault();
                 if (fg == null) 
                         throw new TaskCanceledException("Hay un producto que fue eliminado o no se pudo cargar");
-                concat = fg.Nombre + "@" + fg.Categoria;
+                concat = fg.Nombre + "@" + fg.Categoria + "@" + fg.Codigo;
             }
             else if (tipoProducto == "producto")
             {
@@ -400,7 +434,7 @@ namespace GeoPedidos.BLL.Implementacion
                 FabricaProducto fg = query.Where(e => e.Id == codigoProducto && e.IdEmpresa == idEmpresa).FirstOrDefault();
                 if (fg == null)
                     throw new TaskCanceledException("Hay un producto que fue eliminado o no se pudo cargar");
-                concat = fg.Nombre + "@" + fg.Categoria;
+                concat = fg.Nombre + "@" + fg.Categoria + "@" + fg.Codigo;
             }
             else if (tipoProducto == "insumo")
             {
@@ -409,7 +443,7 @@ namespace GeoPedidos.BLL.Implementacion
                 FabricaInsumo fg = query.Where(e => e.Id == codigoProducto && e.IdEmpresa == idEmpresa.ToString()).FirstOrDefault();
                 if (fg == null)
                     throw new TaskCanceledException("Hay un producto que fue eliminado o no se pudo cargar");
-                concat = fg.Nombre + "@" + fg.Categoria;
+                concat = fg.Nombre + "@" + fg.Categoria + "@" + fg.Codigo;
             }
             else // PASTELERIA
             {
@@ -417,7 +451,7 @@ namespace GeoPedidos.BLL.Implementacion
                 FabricaPasteleria fg = query.Where(e => e.Id == codigoProducto && e.IdEmpresa == idEmpresa).FirstOrDefault();
                 if (fg == null)
                     throw new TaskCanceledException("Hay un producto que fue eliminado o no se pudo cargar");
-                concat = fg.Nombre + "@" + fg.Categoria;
+                concat = fg.Nombre + "@" + fg.Categoria + "@" + fg.Codigo;
             }
 
             return concat;

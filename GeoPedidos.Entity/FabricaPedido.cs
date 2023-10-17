@@ -29,6 +29,8 @@ public partial class FabricaPedido
 
     public DateTime? FechaAnulado { get; set; }
 
+    public DateTime? FechaEntrega { get; set; }
+
     public int? IdSucursal { get; set; }
 
     public int? IdUsuario { get; set; }

@@ -22,9 +22,11 @@ builder.Services.InyectarDependencia(builder.Configuration); // Llamamos al meto
 builder.Services.AddAutoMapper(typeof(AutoMapperProfile));// Ejecutar AUTOMAPPER
 
 var context = new CustomAssemblyLoadContext();
+
 //context.LoadUnmanagedLibrary(Path.Combine(Directory.GetCurrentDirectory(), "Utilidades/LibreriaPDF/32bits/libwkhtmltox.dll")); // PARA EL SERVIDOR
 context.LoadUnmanagedLibrary(Path.Combine(Directory.GetCurrentDirectory(), "Utilidades/LibreriaPDF/64bits/libwkhtmltox.dll")); //  PARA NOSOTROS
 builder.Services.AddSingleton(typeof(IConverter), new SynchronizedConverter(new PdfTools())); // AGREGA LIBRERIA PDF
+
 
 var app = builder.Build();
 

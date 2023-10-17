@@ -12,5 +12,7 @@
 
         public string? Pendiente { get; set; }
 
+        public int? Activo { get; set; }
+
     }
 }

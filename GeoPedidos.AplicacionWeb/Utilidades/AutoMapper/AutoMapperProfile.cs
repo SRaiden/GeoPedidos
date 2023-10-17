@@ -68,12 +68,24 @@ namespace GeoPedidos.AplicacionWeb.Utilidades.AutoMapper
                     .ForMember(destino =>
                     destino.Created,
                     opt => opt.MapFrom(origen => origen.Created.Value.ToString("dd-MM-yyyy"))
-                    ) ;
+                    ).ForMember(destino =>
+                    destino.FechaEntrega,
+                    opt => opt.MapFrom(origen => origen.FechaEntrega.Value.ToString("dd-MM-yyyy"))
+                    ).ForMember(destino =>
+                    destino.Modified,
+                    opt => opt.MapFrom(origen => origen.Modified.Value.ToString("dd-MM-yyyy"))
+                    );
 
             CreateMap<VMFabricaPedido, FabricaPedido>()
                     .ForMember(destino =>
                     destino.Created,
                     opt => opt.MapFrom(origen => DateTime.Parse(origen.Created))
+                    ).ForMember(destino =>
+                    destino.FechaEntrega,
+                    opt => opt.MapFrom(origen => DateTime.Parse(origen.FechaEntrega))
+                    ).ForMember(destino =>
+                    destino.Modified,
+                    opt => opt.MapFrom(origen => DateTime.Parse(origen.Modified))
                     );
             #endregion
 
@@ -92,10 +104,53 @@ namespace GeoPedidos.AplicacionWeb.Utilidades.AutoMapper
             #endregion
 
             #region Fabrica_TODOSLOSPRODUCTOS
-            CreateMap<FabricaGusto, VMListaProductos>().ReverseMap();
-            CreateMap<FabricaInsumo, VMListaProductos>().ReverseMap();
-            CreateMap<FabricaPasteleria, VMListaProductos>().ReverseMap();
-            CreateMap<FabricaProducto, VMListaProductos>().ReverseMap();
+            CreateMap<FabricaGusto, VMListaProductos>()
+                   .ForMember(destino =>
+                   destino.Activo,
+                   opt => opt.MapFrom(origen => origen.Activo == true ? 1 : 0)
+                   );
+
+            CreateMap<VMListaProductos, FabricaGusto>()
+                .ForMember(destino =>
+                destino.Activo,
+                opt => opt.MapFrom(origen => origen.Activo == 1 ? true : false)
+                );
+            //-------------------------------------------------------------------//
+            CreateMap<FabricaInsumo, VMListaProductos>()
+                   .ForMember(destino =>
+                   destino.Activo,
+                   opt => opt.MapFrom(origen => origen.Activo == true ? 1 : 0)
+                   );
+
+            CreateMap<VMListaProductos, FabricaInsumo>()
+                .ForMember(destino =>
+                destino.Activo,
+                opt => opt.MapFrom(origen => origen.Activo == 1 ? true : false)
+                );
+            //-------------------------------------------------------------------//
+            CreateMap<FabricaPasteleria, VMListaProductos>()
+               .ForMember(destino =>
+               destino.Activo,
+               opt => opt.MapFrom(origen => origen.Activo == true ? 1 : 0)
+               );
+
+            CreateMap<VMListaProductos, FabricaPasteleria>()
+                .ForMember(destino =>
+                destino.Activo,
+                opt => opt.MapFrom(origen => origen.Activo == 1 ? true : false)
+                );
+            //-------------------------------------------------------------------//
+            CreateMap<FabricaProducto, VMListaProductos>()
+               .ForMember(destino =>
+               destino.Activo,
+               opt => opt.MapFrom(origen => origen.Activo == true ? 1 : 0)
+               );
+
+            CreateMap<VMListaProductos, FabricaProducto>()
+                .ForMember(destino =>
+                destino.Activo,
+                opt => opt.MapFrom(origen => origen.Activo == 1 ? true : false)
+                );
             #endregion
         }
     }

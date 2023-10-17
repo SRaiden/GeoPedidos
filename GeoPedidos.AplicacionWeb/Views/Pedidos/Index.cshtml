@@ -17,106 +17,102 @@
     <!-- BUSQUEDA -->
     <div class="card mb-4">
 
-        @if (ViewBag.Elegir)
+@*        @if (ViewBag.Elegir)
         {
             <input id="Filtrada" name="Filtrada" type="checkbox" checked hidden />
-            <input id="empFiltrada" name="empFiltrada" value="@ViewBag.EmpresaElegida" hidden />
-            <input id="sucFiltrada" name="sucFiltrada" value="@ViewBag.SucursalElegida" hidden />
-            <input id="radioFiltrada" name="radioFiltrada" value="@ViewBag.RadioElegida" hidden />
-            <input id="fechaDesdeFiltrada" name="fechaDesdeFiltrada" value="@ViewBag.FechaDesdeElegida" hidden />
-            <input id="fechaHastaFiltrada" name="fechaHastaFiltrada" value="@ViewBag.FechaHastaElegida" hidden />
+            <input id="EmpresaElegida" name="EmpresaElegida" type="text" value="@ViewBag.EmpresaElegida" hidden />
+            <input id="SucursalElegida" name="SucursalElegida" type="text" value="@ViewBag.SucursalElegida" hidden />
+            <input id="RadioElegida" name="RadioElegida" type="text" value="@ViewBag.RadioElegida" hidden />
+            <input id="FechaDesdeElegida" name="FechaDesdeElegida" type="text" value="@ViewBag.FechaDesdeElegida" hidden />
+            <input id="FechaHastaElegida" name="FechaHastaElegida" type="text" value="@ViewBag.FechaHastaElegida" hidden />
         }
-
+*@
         <h5 class="card-header">Busqueda de Pedidos</h5>
         <br />
-        <form asp-action="Index" asp-controller="Pedidos" method="post">
-            <input id="userLogin" name="userLogin" value="@ViewBag.user" hidden />
-            <input id="rolLogin" name="rolLogin" value="@ViewBag.rolLogin" hidden />
+  
+        <input id="userLogin" name="userLogin" value="@ViewBag.user" hidden />
+        <input id="rolLogin" name="rolLogin" value="@ViewBag.rolLogin" hidden />
 
-            <div class="card-body">
-                <div class="row gx-3 gy-2 align-items-center">
-                    @if (ViewBag.idEmpresaLogin == "0" && ViewBag.idSucursalLogin == "0") // soy SuperAdmin
-                    {
-                        <div class="d-grid gap-2 col-lg-6 mx-auto">
-                            <label class="form-label" for="selectTypeOpt">Empresas</label>
-                            <select id="cboEmpresas" name="cboEmpresas" class="form-select color-dropdown">
-                            </select>
-                        </div>
+        <div class="card-body">
+            <div class="row gx-3 gy-2 align-items-center">
+                @if (ViewBag.idEmpresaLogin == "0" && ViewBag.idSucursalLogin == "0") // soy SuperAdmin
+                {
+                    <div class="d-grid gap-2 col-lg-6 mx-auto">
+                        <label class="form-label" for="selectTypeOpt">Empresas</label>
+                        <select id="cboEmpresas" name="cboEmpresas" class="form-select color-dropdown">
+                        </select>
+                    </div>
 
-                        <div class="d-grid gap-2 col-lg-6 mx-auto">
-                            <label class="form-label" for="selectPlacement">Sucursales</label>
-                            <select class="form-select placement-dropdown" id="cboSucursales" name="cboSucursales">
-                            </select>
-                        </div>
-                    }
-                    else if (ViewBag.idSucursalLogin == "0") // Soy Admin de Sucursales
-                    {
-                        <div class="d-grid gap-2 col-lg-6 mx-auto">
-                            <label class="form-label" for="selectPlacement">Sucursales</label>
-                            <select class="form-select placement-dropdown" id="cboSucursales" name="cboSucursales">
-                            </select>
-                        </div>
-                        <input id="cboEmpresas" name="cboEmpresas" value="@ViewBag.idEmpresaLogin" hidden />
-                    }
-                    else
-                    { // Soy User
-                        <input id="cboSucursales" name="cboSucursales" value="@ViewBag.idSucursalLogin" hidden />
-                        <input id="cboEmpresas" name="cboEmpresas" value="@ViewBag.idEmpresaLogin" hidden />
-                    }
-                </div>
+                    <div class="d-grid gap-2 col-lg-6 mx-auto">
+                        <label class="form-label" for="selectPlacement">Sucursales</label>
+                        <select class="form-select placement-dropdown" id="cboSucursales" name="cboSucursales">
+                        </select>
+                    </div>
+                }
+                else if (ViewBag.idSucursalLogin == "0") // Soy Admin de Sucursales
+                {
+                    <div class="d-grid gap-2 col-lg-6 mx-auto">
+                        <label class="form-label" for="selectPlacement">Sucursales</label>
+                        <select class="form-select placement-dropdown" id="cboSucursales" name="cboSucursales">
+                        </select>
+                    </div>
+                    <input id="cboEmpresas" name="cboEmpresas" value="@ViewBag.idEmpresaLogin" hidden />
+                }
+                else
+                { // Soy User
+                    <input id="cboSucursales" name="cboSucursales" value="@ViewBag.idSucursalLogin" hidden />
+                    <input id="cboEmpresas" name="cboEmpresas" value="@ViewBag.idEmpresaLogin" hidden />
+                }
+            </div>
 
-                <!-- Radio -->
-                <div class="justify-content-center">
-                    <div class="row gy-3">
-                        <div class="col-xl-6">
-                            <div class="demo-vertical-spacing">
-                                <!-- Radio -->
-                                <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
-                                    <input type="radio" class="btn-check" name="rbReporte" id="rbTodos" value="todos" />
-                                    <label class="btn btn-outline-primary" for="rbTodos">Todos</label>
-                                    <input type="radio" class="btn-check" name="rbReporte" id="rbHelados" value="helado" />
-                                    <label class="btn btn-outline-primary" for="rbHelados">Helados</label>
-                                    <input type="radio" class="btn-check" name="rbReporte" id="rbProductos" value="producto"/>
-                                    <label class="btn btn-outline-primary" for="rbProductos">Productos</label>
-                                    <input type="radio" class="btn-check" name="rbReporte" id="rbInsumos" value="insumo"/>
-                                    <label class="btn btn-outline-primary" for="rbInsumos">Insumos</label>
-                                    <input type="radio" class="btn-check" name="rbReporte" id="rbPasteleria" value="pasteleria"/>
-                                    <label class="btn btn-outline-primary" for="rbPasteleria">Pasteleria</label>
-                                </div>
+            <!-- Radio -->
+            <div class="justify-content-center">
+                <div class="row gy-3">
+                    <div class="col-xl-6">
+                        <div class="demo-vertical-spacing">
+                            <!-- Radio -->
+                            <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+                                <input type="radio" class="btn-check" name="rbReporte" id="rbTodos" @*value="todos"*@ />
+                                <label class="btn btn-outline-primary" for="rbTodos">Todos</label>
+                                <input type="radio" class="btn-check" name="rbReporte" id="rbHelados"@* value="helado"*@ />
+                                <label class="btn btn-outline-primary" for="rbHelados">Helados</label>
+                                <input type="radio" class="btn-check" name="rbReporte" id="rbProductos" @*value="producto"*@ />
+                                <label class="btn btn-outline-primary" for="rbProductos">Productos</label>
+                                <input type="radio" class="btn-check" name="rbReporte" id="rbInsumos" @*value="insumo"*@ />
+                                <label class="btn btn-outline-primary" for="rbInsumos">Insumos</label>
+                                <input type="radio" class="btn-check" name="rbReporte" id="rbPasteleria" @*value="pasteleria"*@ />
+                                <label class="btn btn-outline-primary" for="rbPasteleria">Pasteleria</label>
                             </div>
                         </div>
                     </div>
                 </div>
-                <!-- /Radio -->
-
-                <br />
-
-                <!-- Date -->
-                <div class="row gx-3 gy-2 align-items-center">
-                    <div class="d-grid gap-2 col-lg-6 mx-auto">
-                        <label for="form-label" class="form-label">Desde</label>
-                        <input class="form-control" type="date" id="txtDesde" name="txtDesde" />
-                    </div>
-
-                    <div class="d-grid gap-2 col-lg-6 mx-auto">
-                        <label for="form-label" class="form-label">Hasta</label>
-                        <input class="form-control" type="date" id="txtHasta" name="txtHasta" />
-                    </div>
-                </div>
-                <!-- /Date -->
-
-                <br />
-
-
-                <div class="row gx-3 gy-2 align-items-center">
-                    <div class="d-grid gap-2 col-lg-6 mx-auto">
-                        <button type="submit" class="btn btn-success" id="btnBuscar">Buscar</button>
-                    </div>
-                </div>
-
-
             </div>
-        </form>
+            <!-- /Radio -->
+
+            <br />
+
+            <!-- Date -->
+            <div class="row gx-3 gy-2 align-items-center">
+                <div class="d-grid gap-2 col-lg-6 mx-auto">
+                    <label for="form-label" class="form-label">Desde</label>
+                    <input class="form-control" type="date" id="txtDesde" name="txtDesde" />
+                </div>
+
+                <div class="d-grid gap-2 col-lg-6 mx-auto">
+                    <label for="form-label" class="form-label">Hasta</label>
+                    <input class="form-control" type="date" id="txtHasta" name="txtHasta" />
+                </div>
+            </div>
+            <!-- /Date -->
+            <br />
+
+            @*<div class="row gx-3 gy-2 align-items-center">
+                <div class="d-grid gap-2 col-lg-6 mx-auto">
+                    <button type="submit" class="btn btn-success">Buscar</button>
+                </div>
+            </div>*@
+
+        </div>
     </div>
     <!--/ BUSQUEDA -->
 
@@ -135,8 +131,7 @@
             </div>
         }
 
-@*        <h5 class="card-header">RESULTADOS</h5>*@
-        <div class="table-responsive text-nowrap" style="max-height: 400px; overflow-y:auto;">
+        <div class="table-responsive text-nowrap" @*style="max-height: 400px; overflow-y: auto;"*@>
             <table class="table" id="tbdata" >
                 <thead>
                     <tr>
@@ -152,7 +147,7 @@
                     </tr>
                 </thead>
                 <tbody class="table-border-bottom-0">
-                    @if (ViewBag.elementosEncontrados != null)
+                   @* @if (ViewBag.elementosEncontrados != null)
                     {
                         foreach (var items in ViewBag.elementosEncontrados)
                         {
@@ -181,7 +176,7 @@
                                 </td>
                             </tr>
                         }
-                    }
+                    }*@
                 </tbody>
             </table>
         </div>
@@ -201,6 +196,12 @@
                 <h4 class="mb-0" id="titulo"></h4>
             </div>
             <div class="modal-body">
+                <div class="row mb-3" style="justify-content: right;">
+                    <label class="col-sm-2 col-form-label">Fecha Entrega</label>
+                    <div class="col-sm-3">
+                        <input class="form-control" type="date" id="txtFechaEntrega" name="txtFechaEntrega" />
+                    </div>
+                </div>
                 <form>
                     <div class="table-responsive text-nowrap">
                         <table class="table" id="tbPedido">
@@ -218,9 +219,17 @@
                         </table>
                     </div>
                 </form>
+                <br />
+                <div class="row mb-3">
+                    <label class="col-sm-2 col-form-label">Comentario</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="txtComentario" placeholder="Escriba un Comentario">
+                    </div>
+                </div>
+
             </div>
             <div class="modal-footer">
-                <button class="btn btn-success btn-sm" type="button" id="btnGuardar">Guardar</button>
+                <button class="btn btn-success btn-sm" type="button" id="btnGuardar">Enviar</button>
                 <button class="btn btn-warning btn-sm" type="button" id="btnPendiente">Pendiente</button>
                 <button class="btn btn-danger btn-sm" type="button" data-dismiss="modal" id="CerrarModal">Cancel</button>
             </div>
@@ -236,6 +245,12 @@
                 <h4 class="mb-0" id="titulo">Detalle del Pedido</h4>
             </div>
             <div class="modal-body">
+                <div class="row mb-3" style="justify-content: right;">
+                    <label class="col-sm-2 col-form-label">Fecha Entrega</label>
+                    <div class="col-sm-3">
+                        <input class="form-control" type="text" id="txtVerFechaEntrega" name="txtVerFechaEntrega" readonly/>
+                    </div>
+                </div>
                 <form>
                     <div class="table-responsive text-nowrap">
                         <table class="table" id="tbPedidoVer">
@@ -252,6 +267,13 @@
                         </table>
                     </div>
                 </form>
+                <br />
+                <div class="row mb-3">
+                    <label class="col-sm-2 col-form-label">Comentario</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="txtVerComentario" readonly>
+                    </div>
+                </div>
             </div>
             <div class="modal-footer">
                 <button class="btn btn-danger btn-sm" type="button" data-dismiss="modal" id="CerrarModalVer">Salir</button>

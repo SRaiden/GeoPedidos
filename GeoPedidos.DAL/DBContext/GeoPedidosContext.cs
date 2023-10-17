@@ -70,9 +70,10 @@ public partial class GeoPedidosContext : DbContext
 
         modelBuilder.Entity<Configuracion>(entity =>
         {
-            entity
-            .HasNoKey()
-            .ToTable("Configuracion");
+            entity.HasKey(e => e.Id).HasName("PK_Configuracion");
+            entity.ToTable("Configuracion");
+
+            entity.Property(e => e.Id).ValueGeneratedNever();
 
             entity.Property(e => e.Propiedad)
                 .HasMaxLength(50)
@@ -143,6 +144,9 @@ public partial class GeoPedidosContext : DbContext
             entity.Property(e => e.FechaRemitido)
                 .HasColumnType("datetime")
                 .HasColumnName("Fecha_Remitido");
+            entity.Property(e => e.FechaEntrega)
+                .HasColumnType("datetime")
+                .HasColumnName("Fecha_Entrega");
             entity.Property(e => e.IdSucursal).HasColumnName("Id_Sucursal");
             entity.Property(e => e.IdUsuario).HasColumnName("Id_Usuario");
             entity.Property(e => e.LeidoCaja).HasColumnName("Leido_Caja");
@@ -151,7 +155,7 @@ public partial class GeoPedidosContext : DbContext
                 .HasMaxLength(500)
                 .IsUnicode(false);
             entity.Property(e => e.Comentario)
-               .HasMaxLength(500)
+               .HasMaxLength(200)
                .IsUnicode(false);
             entity.Property(e => e.NumeroPedido).HasColumnName("Numero_Pedido");
             entity.Property(e => e.Tipo)

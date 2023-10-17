@@ -22,6 +22,12 @@ namespace GeoPedidos.AplicacionWeb.Controllers
             _empresasServices = empresasServices;
         }
 
+        public IActionResult RestablecerClave(string clave)
+        {
+            ViewData["Clave"] = clave;
+            return View();
+        }
+
         public async Task<IActionResult> PDFPedido(int idPedido)
         {
             // saber que empresa pertenece la sucursal que pidio el producto

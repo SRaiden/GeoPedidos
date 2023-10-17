@@ -18,5 +18,11 @@
 
         public int? IdPedido { get; set; }
 
+        public string? Comentario { get; set; }
+
+        public string? FechaEntrega { get; set; }
+
+        public string? Mensaje { get; set; }
+
     }
 }

@@ -26,12 +26,14 @@
 
         public string? FechaDesde { get; set; }
 
-        public string? Comentario { get; set; }
-
         public string? FechaHasta { get; set; }
 
         public string? Created { get; set; }
 
+        public string? Modified { get; set; }
 
+        public string? Comentario { get; set; }
+
+        public string? FechaEntrega { get; set; }
     }
 }

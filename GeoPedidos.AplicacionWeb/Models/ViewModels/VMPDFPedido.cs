@@ -7,5 +7,6 @@
         public string? Estado { get; set; }
 
         public List<VMPedido>? Pedido { get; set; }
+
     }
 }

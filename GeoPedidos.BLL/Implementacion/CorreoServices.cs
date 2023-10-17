@@ -26,38 +26,58 @@ namespace GeoPedidos.BLL.Implementacion
         {
             try
             {
-                // Llamamos a la tabla Consultar y traemos todos los registros de la columna Recurso que se llamen Servicio_Correo
-                IQueryable<Configuracion> query = await _repository.Consultar(c => c.Recurso.Equals("Servicio_Correo"));
+                // Llamamos a la tabla Configuracion y traemos todos los registros de la columna Recurso que se llamen Servicio_Correo
+                //Queryable<Configuracion> query = await _repository.Consultar();
                 // Creamos un diccionario que guardara 2 elementos, la columna Propiedad y Valor
-                Dictionary<string, string> config = query.ToDictionary(keySelector: c => c.Propiedad, elementSelector: c => c.Valor);
+                //Dictionary<string, string> config = query.ToDictionary(keySelector: c => c.Propiedad, elementSelector: c => c.Valor);
 
-                // Creamos el cuerpo del mensaje
-                var credenciales = new NetworkCredential(config["correo"], config["clave"]);
-                var correo = new MailMessage()
-                {
-                    From = new MailAddress(config["correo"], config["alias"]),
-                    Subject = Asunto,
-                    Body = Mensaje,
-                    IsBodyHtml = true
-                };
+                ////Creamos el cuerpo del mensaje
+                var credenciales = new NetworkCredential("noresponder@geosoft-web.com.ar", "geoweb_nores*");
+                //var correo = new MailMessage()
+                //{
+                //    From = new MailAddress("noresponder@geosoft-web.com.ar"),
+                //    Subject = Asunto,
+                //    Body = Mensaje,
+                //    IsBodyHtml = true
+                //};
 
-                // Creamos el tipo de envio
-                correo.To.Add(new MailAddress(CorreoDestino));
-                var clienteServidor = new SmtpClient()
+                //// Creamos el tipo de envio
+                //correo.To.Add(new MailAddress(CorreoDestino));
+                //var clienteServidor = new SmtpClient()
+                //{
+                //    Host = "geosoft-web.com.ar",
+                //    Port = Int32.Parse("465"),
+                //    Credentials = credenciales,
+                //    DeliveryMethod = SmtpDeliveryMethod.Network,
+                //    UseDefaultCredentials = false,
+                //    EnableSsl = true
+                //};
+
+                //--------------------------------------------------------------------------//
+
+                SmtpClient smtp2 = new SmtpClient("geosoft-web.com.ar", 465)
                 {
-                    Host = config["host"],
-                    Port = Int32.Parse(config["puerto"]),
+                    EnableSsl = true,
                     Credentials = credenciales,
                     DeliveryMethod = SmtpDeliveryMethod.Network,
                     UseDefaultCredentials = false,
-                    EnableSsl = true
                 };
 
+                MailMessage email = new MailMessage();
+                email.From = new MailAddress("noresponder@geosoft-web.com.ar");
+                email.To.Add(new MailAddress(CorreoDestino));
+                email.Subject = Asunto;
+                email.Body = Mensaje;
+                email.IsBodyHtml = true;
+
+                smtp2.Send(email);
+                smtp2.Dispose();
+
                 // Enviamos mensaje
-                clienteServidor.Send(correo);
+                //clienteServidor.Send(correo);
                 return true;
             }
-            catch
+            catch(Exception ex)
             {
                 return false;
             }

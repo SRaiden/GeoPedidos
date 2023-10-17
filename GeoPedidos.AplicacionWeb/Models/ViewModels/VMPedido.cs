@@ -10,6 +10,8 @@
 
         public string? CreatedCabecera { get; set; }
 
+        public string? entregaCabecera { get; set; }
+
         //-------------------------------- DETALLE ------------------------------------ //
 
         public int? CodigoDetalle { get; set; }
@@ -25,5 +27,7 @@
         //-------------------------------- EDITAR ------------------------------------ //
 
         public int? idPedido { get; set; }
+
+        public string? Comentario { get; set; }
     }
 }

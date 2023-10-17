@@ -25,6 +25,9 @@ namespace GeoPedidos.AplicacionWeb.Controllers
         private readonly IEmpresasServices _empresasServices;
         private readonly IConverter _converter;
 
+        private static bool hayInactivo = false;
+        private static string codigosInactivos = "";
+
         public PedidosController(IMapper mapper, IPedidosServices pedidosServices, ISucursalServices sucursalServices, 
                                 IFabricaUsuariosServices usuariosServices, IEmpresasServices empresasServices, IConverter converter)
         {
@@ -76,15 +79,97 @@ namespace GeoPedidos.AplicacionWeb.Controllers
             return View();
         }
 
-        [HttpPost] // CODIGO TEMPORAL HASTA VER QUE ONDA QUE EL SERVIDOR NO EJECUTA EL OTRO METODO DE BUSQUEDA POR MEDIO DE UN DATABLE
-        public async Task<IActionResult> Index(string userLogin, string cboEmpresas, string cboSucursales, string txtDesde, string txtHasta)
+        //[HttpPost] // CODIGO TEMPORAL HASTA VER QUE ONDA QUE EL SERVIDOR NO EJECUTA EL OTRO METODO DE BUSQUEDA POR MEDIO DE UN DATABLE
+        //public async Task<IActionResult> Index(string userLogin, string cboEmpresas, string cboSucursales, string txtDesde, string txtHasta)
+        //{
+        //    string rbReporte = Request.Form["rbReporte"];
+        //    //----------------------------------------------------//
+
+        //    List<VMFabricaPedido> vmListaProductos = _mapper.Map<List<VMFabricaPedido>>(await _pedidosServices.ObtenerPedidos(
+        //                                            Int32.Parse(userLogin.ToString()), Int32.Parse(cboSucursales.ToString()), Int32.Parse(cboEmpresas.ToString()),
+        //                                            rbReporte, txtDesde, txtHasta));
+
+        //    foreach (var i in vmListaProductos)
+        //    {
+        //        i.NombreSucursal = await _sucursalServices.ObtenerNombreSucursal(Int32.Parse(i.IdSucursal.ToString()));
+        //        FabricaUsuario fu = await _usuariosServices.DatoUsuario(Int32.Parse(i.IdUsuario.ToString()));
+        //        i.NombreUsuario = fu.Nombre;
+        //    }
+
+        //    ViewBag.elementosEncontrados = vmListaProductos;
+
+        //    // PARA OPCIONES DE QUE MOSTRAR EN EL LOGIN
+        //    ClaimsPrincipal claimPrin = HttpContext.User;
+        //    string idUser = "";
+        //    string nombreUser = "";
+        //    string IdSucursal = "";
+        //    string idEmpresa = "";
+        //    string rol = "";
+
+        //    if (claimPrin.Identity.IsAuthenticated) // se logeo??
+        //    {
+
+        //        // OBTENGO ID USER AL LOGEAR POR MEDIO DEL CLAIMPS
+        //        idUser = claimPrin.Claims.Where(c => c.Type == ClaimTypes.NameIdentifier).Select(c => c.Value).SingleOrDefault();
+
+        //        // OBTENGO SU NOMBRE
+        //        nombreUser = claimPrin.Claims.Where(c => c.Type == ClaimTypes.Name).Select(c => c.Value).SingleOrDefault();
+
+        //        // OBTENGO IDSUCURSAL
+        //        IdSucursal = claimPrin.Claims.Where(c => c.Type == ClaimTypes.Surname).Select(c => c.Value).SingleOrDefault();
+
+        //        // OBTENGO ROL (0 -> ADMIN, 1 -> USER)
+        //        rol = claimPrin.Claims.Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value).SingleOrDefault();
+
+        //        // Busco el IDEMPRESA (ESTO ES PARA SUPERADMIN)
+        //        FabricaUsuario datoUsuario = await _usuariosServices.DatoUsuario(Int32.Parse(idUser));
+        //        idEmpresa = datoUsuario.IdEmpresa.ToString();
+        //    }
+
+        //    ViewBag.user = idUser;
+        //    ViewBag.nombreUser = nombreUser;
+        //    ViewBag.idSucursalLogin = IdSucursal;
+        //    ViewBag.idEmpresaLogin = idEmpresa;
+        //    ViewBag.rolLogin = rol;
+
+        //    //-------------------------------//
+        //    // OPCIONES ELEGIDAS
+        //    ViewBag.Elegir = true;
+        //    ViewBag.EmpresaElegida = cboEmpresas;
+        //    ViewBag.SucursalElegida = cboSucursales;
+
+        //    if (rbReporte == "todos" || rbReporte == "pasteleria")
+        //    {
+        //        string capitalizedValue = char.ToUpper(rbReporte[0]) + rbReporte.Substring(1).ToLower();
+        //        ViewBag.RadioElegida = "#rb" + capitalizedValue;
+        //    }
+        //    else
+        //    {
+        //        string capitalizedValue = char.ToUpper(rbReporte[0]) + rbReporte.Substring(1).ToLower() + "s";
+        //        ViewBag.RadioElegida = "#rb" + capitalizedValue;
+        //    }
+
+        //    ViewBag.FechaDesdeElegida = txtDesde;
+        //    ViewBag.FechaHastaElegida = txtHasta;
+
+        //    return View();
+        //}
+
+        [HttpPost]
+        public async Task<IActionResult> Busqueda(string data)
         {
-            string rbReporte = Request.Form["rbReporte"];
+            JObject modeloJson = JObject.Parse(data);
+            int idUsuario = (int)modeloJson["idUsuario"];
+            int idSucursal = (int)modeloJson["idSucursal"];
+            int idEmpresa = (int)modeloJson["idEmpresa"];
+            string tipo = (string)modeloJson["tipo"];
+            string FechaDesde = (string)modeloJson["FechaDesde"];
+            string FechaHasta = (string)modeloJson["FechaHasta"];
             //----------------------------------------------------//
 
             List<VMFabricaPedido> vmListaProductos = _mapper.Map<List<VMFabricaPedido>>(await _pedidosServices.ObtenerPedidos(
-                                                    Int32.Parse(userLogin.ToString()), Int32.Parse(cboSucursales.ToString()), Int32.Parse(cboEmpresas.ToString()),
-                                                    rbReporte, txtDesde, txtHasta));
+                                                    Int32.Parse(idUsuario.ToString()), Int32.Parse(idSucursal.ToString()), Int32.Parse(idEmpresa.ToString()),
+                                                    tipo, FechaDesde, FechaHasta));
 
             foreach (var i in vmListaProductos)
             {
@@ -93,92 +178,11 @@ namespace GeoPedidos.AplicacionWeb.Controllers
                 i.NombreUsuario = fu.Nombre;
             }
 
-            ViewBag.elementosEncontrados = vmListaProductos;
-
-            // PARA OPCIONES DE QUE MOSTRAR EN EL LOGIN
-            ClaimsPrincipal claimPrin = HttpContext.User;
-            string idUser = "";
-            string nombreUser = "";
-            string IdSucursal = "";
-            string idEmpresa = "";
-            string rol = "";
-
-            if (claimPrin.Identity.IsAuthenticated) // se logeo??
-            {
-
-                // OBTENGO ID USER AL LOGEAR POR MEDIO DEL CLAIMPS
-                idUser = claimPrin.Claims.Where(c => c.Type == ClaimTypes.NameIdentifier).Select(c => c.Value).SingleOrDefault();
-
-                // OBTENGO SU NOMBRE
-                nombreUser = claimPrin.Claims.Where(c => c.Type == ClaimTypes.Name).Select(c => c.Value).SingleOrDefault();
-
-                // OBTENGO IDSUCURSAL
-                IdSucursal = claimPrin.Claims.Where(c => c.Type == ClaimTypes.Surname).Select(c => c.Value).SingleOrDefault();
-
-                // OBTENGO ROL (0 -> ADMIN, 1 -> USER)
-                rol = claimPrin.Claims.Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value).SingleOrDefault();
-
-                // Busco el IDEMPRESA (ESTO ES PARA SUPERADMIN)
-                FabricaUsuario datoUsuario = await _usuariosServices.DatoUsuario(Int32.Parse(idUser));
-                idEmpresa = datoUsuario.IdEmpresa.ToString();
-            }
-
-            ViewBag.user = idUser;
-            ViewBag.nombreUser = nombreUser;
-            ViewBag.idSucursalLogin = IdSucursal;
-            ViewBag.idEmpresaLogin = idEmpresa;
-            ViewBag.rolLogin = rol;
-
-            //-------------------------------//
-            // OPCIONES ELEGIDAS
-            ViewBag.Elegir = true;
-            ViewBag.EmpresaElegida = cboEmpresas;
-            ViewBag.SucursalElegida = cboSucursales;
-
-            if (rbReporte == "todos" || rbReporte == "pasteleria") {
-                string capitalizedValue = char.ToUpper(rbReporte[0]) + rbReporte.Substring(1).ToLower();
-                ViewBag.RadioElegida = "#rb" + capitalizedValue;
-            } 
-            else
-            {
-                string capitalizedValue = char.ToUpper(rbReporte[0]) + rbReporte.Substring(1).ToLower() + "s";
-                ViewBag.RadioElegida = "#rb" + capitalizedValue;
-            }
-           
-
-
-            ViewBag.FechaDesdeElegida = txtDesde;
-            ViewBag.FechaHastaElegida = txtHasta;
-
-            return View();
+            return StatusCode(StatusCodes.Status200OK, new { data = vmListaProductos });
         }
 
-        //[HttpPost]
-        //public async Task<IActionResult> Busqueda(string data)
-        //{
-        //    JObject modeloJson = JObject.Parse(data);
-        //    int idUsuario = (int)modeloJson["idUsuario"];
-        //    int idSucursal = (int)modeloJson["idSucursal"];
-        //    int idEmpresa = (int)modeloJson["idEmpresa"];
-        //    string tipo = (string)modeloJson["tipo"];
-        //    string FechaDesde = (string)modeloJson["FechaDesde"];
-        //    string FechaHasta = (string)modeloJson["FechaHasta"];
-        //    //----------------------------------------------------//
 
-        //    List<VMFabricaPedido> vmListaProductos = _mapper.Map<List<VMFabricaPedido>>(await _pedidosServices.ObtenerPedidos(
-        //                                            Int32.Parse(idUsuario.ToString()), Int32.Parse(idSucursal.ToString()), Int32.Parse(idEmpresa.ToString()), 
-        //                                            tipo, FechaDesde, FechaHasta));
-            
-        //    foreach(var i in vmListaProductos)
-        //    {
-        //        i.NombreSucursal = await _sucursalServices.ObtenerNombreSucursal(Int32.Parse(i.IdSucursal.ToString()));
-        //        FabricaUsuario fu = await _usuariosServices.DatoUsuario(Int32.Parse(i.IdUsuario.ToString()));
-        //        i.NombreUsuario = fu.Nombre;
-        //    }
-
-        //    return StatusCode(StatusCodes.Status200OK, new { data = vmListaProductos });
-        //}
-
+        ///----------------------------- AGREGAR -------------------------------------////
         [HttpGet]
         public async Task<IActionResult> CargarHelado(int idSucursal)
         {
@@ -216,10 +220,207 @@ namespace GeoPedidos.AplicacionWeb.Controllers
             return StatusCode(StatusCodes.Status200OK, new { data = vmLista });
         }
 
+        //-----------------------------  / AGREGAR -------------------------------------//
+
+        // TRAER ELEMENTOS ACTIVOS DE LA EMPRESA + LOS INACTIVOS SI ESTUVIERON EN UN PEDIDO PENDIENTE ANTERIORMENTE
+        //------------------------------- EDITAR ------------------------------------------//
+        [HttpGet]
+        public async Task<IActionResult> CargarHeladoActivoEInactivoPedido(int idSucursal, int idPedido)
+        {
+            // obtener empresa
+            int idEmpresa = await obtenerEmpresa(idSucursal);
+
+            // ELEMENTOS ACTIVOS DE LA EMPRESA
+            List<VMListaProductos> vmLista = _mapper.Map<List<VMListaProductos>>(await _pedidosServices.ObtenerHelados(idEmpresa));
+
+            // ELEMENTOS DEL PEDIDO
+            List<VMFabricaPedidoDetalle> pedidosLista = _mapper.Map<List<VMFabricaPedidoDetalle>>(await _pedidosServices.VerDetallePedido(idPedido));
+            List<VMListaProductos> vmlista2 = new List<VMListaProductos>();
+            foreach(var i in pedidosLista)
+            {
+                VMListaProductos vmlp = _mapper.Map<VMListaProductos>(await _pedidosServices.ObtenerUnHelado(Int32.Parse(i.Codigo.ToString())));
+                vmlista2.Add(vmlp);
+            }
+
+
+            List<VMListaProductos> total = new List<VMListaProductos>();
+            total.AddRange(vmLista);
+
+            // VERIFICAR QUE TODOS ESTEN EN VMLISTA, SINO AGREGARLO
+            foreach(var a in vmlista2) // LISTA PRODUCTOS DEL PEDIDO PENDIENTE 
+            {
+                Boolean encontrado = false;
+                foreach (var b in vmLista) // LISTA PRODUCTOS ACTIVOS EMPRESA
+                {
+                    if (b.Codigo == a.Codigo) {
+                        encontrado = true;
+                        break;
+                    }
+                }
+                if (!encontrado) // NO ESTA EN LA LISTA GENERAL??
+                {
+                    codigosInactivos += a.Codigo + " - ";
+                    total.Add(a);
+                    hayInactivo = true;
+                }
+            }
+
+            return StatusCode(StatusCodes.Status200OK, new { data = total });
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> CargarProductoActivoEInactivoPedido(int idSucursal, int idPedido)
+        {
+            // obtener empresa
+            int idEmpresa = await obtenerEmpresa(idSucursal);
+
+            // ELEMENTOS ACTIVOS DE LA EMPRESA
+            List<VMListaProductos> vmLista = _mapper.Map<List<VMListaProductos>>(await _pedidosServices.ObtenerProductos(idEmpresa));
+
+            // ELEMENTOS DEL PEDIDO
+            List<VMFabricaPedidoDetalle> pedidosLista = _mapper.Map<List<VMFabricaPedidoDetalle>>(await _pedidosServices.VerDetallePedido(idPedido));
+            List<VMListaProductos> vmlista2 = new List<VMListaProductos>();
+            foreach (var i in pedidosLista)
+            {
+                VMListaProductos vmlp = _mapper.Map<VMListaProductos>(await _pedidosServices.ObtenerUnProducto(Int32.Parse(i.Codigo.ToString())));
+                vmlista2.Add(vmlp);
+            }
+
+
+            List<VMListaProductos> total = new List<VMListaProductos>();
+            total.AddRange(vmLista);
+
+            // VERIFICAR QUE TODOS ESTEN EN VMLISTA, SINO AGREGARLO
+            foreach (var a in vmlista2) // LISTA PRODUCTOS DEL PEDIDO PENDIENTE 
+            {
+                Boolean encontrado = false;
+                foreach (var b in vmLista) // LISTA PRODUCTOS ACTIVOS EMPRESA
+                {
+                    if (b.Codigo == a.Codigo)
+                    {
+                        encontrado = true;
+                        break;
+                    }
+                }
+                if (!encontrado) // NO ESTA EN LA LISTA GENERAL??
+                {
+                    codigosInactivos += a.Codigo + " - ";
+                    hayInactivo = true;
+                    total.Add(a);
+                }
+            }
+
+            return StatusCode(StatusCodes.Status200OK, new { data = total });
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> CargarInsumoActivoEInactivoPedido(int idSucursal, int idPedido)
+        {
+            // obtener empresa
+            int idEmpresa = await obtenerEmpresa(idSucursal);
+
+            // ELEMENTOS ACTIVOS DE LA EMPRESA
+            List<VMListaProductos> vmLista = _mapper.Map<List<VMListaProductos>>(await _pedidosServices.ObtenerInsumos(idEmpresa));
+
+            // ELEMENTOS DEL PEDIDO
+            List<VMFabricaPedidoDetalle> pedidosLista = _mapper.Map<List<VMFabricaPedidoDetalle>>(await _pedidosServices.VerDetallePedido(idPedido));
+            List<VMListaProductos> vmlista2 = new List<VMListaProductos>();
+            foreach (var i in pedidosLista)
+            {
+                VMListaProductos vmlp = _mapper.Map<VMListaProductos>(await _pedidosServices.ObtenerUnInsumo(Int32.Parse(i.Codigo.ToString())));
+                vmlista2.Add(vmlp);
+            }
+
+
+            List<VMListaProductos> total = new List<VMListaProductos>();
+            total.AddRange(vmLista);
+
+            // VERIFICAR QUE TODOS ESTEN EN VMLISTA, SINO AGREGARLO
+            foreach (var a in vmlista2) // LISTA PRODUCTOS DEL PEDIDO PENDIENTE 
+            {
+                Boolean encontrado = false;
+                foreach (var b in vmLista) // LISTA PRODUCTOS ACTIVOS EMPRESA
+                {
+                    if (b.Codigo == a.Codigo)
+                    {
+                        encontrado = true;
+                        break;
+                    }
+                }
+                if (!encontrado) // NO ESTA EN LA LISTA GENERAL??
+                {
+                    total.Add(a);
+                    codigosInactivos += a.Codigo + " - ";
+                    hayInactivo = true;
+                }
+            }
+
+            return StatusCode(StatusCodes.Status200OK, new { data = total });
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> CargarPasteleriaActivoEInactivoPedido(int idSucursal, int idPedido)
+        {
+            // obtener empresa
+            int idEmpresa = await obtenerEmpresa(idSucursal);
+
+            // ELEMENTOS ACTIVOS DE LA EMPRESA
+            List<VMListaProductos> vmLista = _mapper.Map<List<VMListaProductos>>(await _pedidosServices.ObtenerPastelerias(idEmpresa));
+
+            // ELEMENTOS DEL PEDIDO
+            List<VMFabricaPedidoDetalle> pedidosLista = _mapper.Map<List<VMFabricaPedidoDetalle>>(await _pedidosServices.VerDetallePedido(idPedido));
+            List<VMListaProductos> vmlista2 = new List<VMListaProductos>();
+            foreach (var i in pedidosLista)
+            {
+                VMListaProductos vmlp = _mapper.Map<VMListaProductos>(await _pedidosServices.ObtenerUnPasteleria(Int32.Parse(i.Codigo.ToString())));
+                vmlista2.Add(vmlp);
+            }
+
+            // VERIFICAR QUE TODOS ESTEN EN VMLISTA, SINO AGREGARLO
+            List<VMListaProductos> total = new List<VMListaProductos>();
+            total.AddRange(vmLista);
+            foreach (var a in vmlista2) // LISTA PRODUCTOS DEL PEDIDO PENDIENTE 
+            {
+                Boolean encontrado = false;
+                foreach (var b in vmLista) // LISTA PRODUCTOS ACTIVOS EMPRESA
+                {
+                    if (b.Codigo == a.Codigo)
+                    {
+                        encontrado = true;
+                        break;
+                    }
+                }
+                if (!encontrado) // NO ESTA EN LA LISTA GENERAL??
+                {
+                    total.Add(a);
+                    hayInactivo = true;
+                    codigosInactivos += a.Codigo + " - ";
+                }
+            }
+
+            return StatusCode(StatusCodes.Status200OK, new { data = total });
+        }
+
+        //-------------------------------  / EDITAR ------------------------------------------//
+
         [HttpGet]
         public async Task<IActionResult> ObtenerPedido(int idPedido)
         {
             List<VMFabricaPedidoDetalle> vmPedidoDetalle = _mapper.Map<List<VMFabricaPedidoDetalle>>(await _pedidosServices.ObtenerCodigoRealProducto(idPedido));
+            VMFabricaPedido vmfp = _mapper.Map<VMFabricaPedido>(await _pedidosServices.VerCabeceraPedido(idPedido));
+            vmPedidoDetalle[0].Comentario = vmfp.Comentario;
+            vmPedidoDetalle[0].FechaEntrega = vmfp.FechaEntrega;
+
+            if (hayInactivo)
+            {
+                string edicion = codigosInactivos.Substring(0, codigosInactivos.Length - 2);
+                vmPedidoDetalle[0].Mensaje = "Hay elementos del pedido que tienen CANTIDAD cargada, pero ahora figuran en la Base de Datos como inactivos. Si " +
+                "por alguna razon le coloca cantidad a 0 y guarda, ya no podran verse a futuro, a no ser que se vuelva a activarse el producto. \nCodigo Afectados: " +
+                edicion;
+                hayInactivo = false;
+                codigosInactivos = "";
+            }
+
             return StatusCode(StatusCodes.Status200OK, vmPedidoDetalle);
         }
 
@@ -252,6 +453,9 @@ namespace GeoPedidos.AplicacionWeb.Controllers
                 vm.Estado = modelo[0].EstadoCabecera;
                 vm.Cantidad = modelo[0].CantidadCabecera;
                 vm.Created = modelo[0].CreatedDetalle;
+                vm.Modified = modelo[0].CreatedDetalle;
+                vm.Comentario = modelo[0].Comentario;
+                vm.FechaEntrega = modelo[0].entregaCabecera;
                 vm.Remito = 0;
                 vm.IdUsuario = Int32.Parse(idUser);
                 vm.IdSucursal = Int32.Parse(IdSucursal);
@@ -274,7 +478,7 @@ namespace GeoPedidos.AplicacionWeb.Controllers
 
                 //// Resultado
                 gResponse.Estado = true;
-                gResponse.Mensaje = "El " + vm.Tipo + " fue creado";
+                gResponse.Mensaje = "El pedido de " + vm.Tipo.ToUpper() + " fue creado";
             }
             catch (Exception ex)
             {
@@ -312,6 +516,8 @@ namespace GeoPedidos.AplicacionWeb.Controllers
                 vm.Estado = modelo[0].EstadoCabecera;
                 vm.Cantidad = modelo[0].CantidadCabecera;
                 vm.Created = modelo[0].CreatedDetalle;
+                vm.Comentario = modelo[0].Comentario;
+                vm.FechaEntrega = modelo[0].entregaCabecera;
                 vm.Remito = 0;
                 vm.IdUsuario =  Int32.Parse(idUser);
                 vm.IdSucursal = Int32.Parse(IdSucursal);
@@ -334,7 +540,7 @@ namespace GeoPedidos.AplicacionWeb.Controllers
 
                 //// Resultado
                 gResponse.Estado = true;
-                gResponse.Mensaje = "El " + vm.Tipo + " fue editado";
+                gResponse.Mensaje = "El pedido de" + vm.Tipo.ToUpper() + " fue editado";
             }
             catch (Exception ex)
             {
@@ -381,7 +587,7 @@ namespace GeoPedidos.AplicacionWeb.Controllers
                 string resultado = await _pedidosServices.ObtenerNombreCategoriaProducto(Int32.Parse(vmLista[a].Codigo.ToString()), tipoPedido.Replace("\\", "").Replace("\"", "").ToLower(), Int32.Parse(datoSucursal.EmpresaId.ToString()));
                 string[] separar = resultado.Split('@');
 
-                vm.CodigoDetalle = vmLista[a].Codigo;
+                vm.CodigoDetalle = Int32.Parse(separar[2]);
                 vm.CantidadDetalle = vmLista[a].Cantidad;
                 vm.DescripcionDetalle = separar[0];
                 vm.CategoriaDetalle = separar[1];
